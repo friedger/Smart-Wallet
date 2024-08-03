@@ -15,19 +15,19 @@
 )
 
 (define-private (is-allowed-stx (amount uint) (recipient principal) (memo (optional (buff 34))))
-	(ok (asserts! (default-to false (map-get? admins contract-caller)) err-unauthorised))
+	(is-admin-calling)
 )
 
 (define-private (is-allowed-extension (extension <extension-trait>) (payload (buff 2048)))
-	(ok (asserts! (default-to false (map-get? admins contract-caller)) err-unauthorised))
+	(is-admin-calling)
 )
 
 (define-private (is-allowed-sip010 (sip010 <sip-010-trait>) (amount uint) (recipient principal) (memo (optional (buff 34))))
-		(ok (asserts! (default-to false (map-get? admins contract-caller)) err-unauthorised))
+	(is-admin-calling)
 )
 
 (define-private (is-allowed-sip009 (sip009 <sip-009-trait>) (amount uint) (recipient principal))
-		(ok (asserts! (default-to false (map-get? admins contract-caller)) err-unauthorised))
+	(is-admin-calling)
 )
 ;;
 ;; calls with context switching

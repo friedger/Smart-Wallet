@@ -20,20 +20,20 @@
 )
 
 (define-private (is-allowed-stx (rules <rule-set-trait>) (amount uint) (recipient principal) (memo (optional (buff 34))))
-	(contract-call? rules is-allowed-stx amount recipient memo)
+	(contract-call? rules is-allowed-stx contract-caller amount recipient memo)
 )
 
 (define-private (is-allowed-extension (rules <rule-set-trait>) (extension <extension-trait>) (payload (buff 2048)))
-	(contract-call? rules is-allowed-extension extension payload)
+	(contract-call? rules is-allowed-extension contract-caller extension payload)
 )
 
 
-(define-private (is-allowed-sip010 (sip010 <sip-010-trait>) (amount uint) (recipient principal) (memo (optional (buff 34))))
-		(ok (asserts! true err-unauthorised))
+(define-private (is-allowed-sip010 (rules <rule-set-trait>) (sip010 <sip-010-trait>) (amount uint) (recipient principal) (memo (optional (buff 34))))
+	(contract-call? rules is-allowed-sip010 contract-caller sip010 amount recipient memo)
 )
 
-(define-private (is-allowed-sip009 (sip009 <sip-009-trait>) (amount uint) (recipient principal))
-		(ok (asserts! true err-unauthorised))
+(define-private (is-allowed-sip009 (rules <rule-set-trait>) (sip009 <sip-009-trait>) (nft-id uint) (recipient principal))
+	(contract-call? rules is-allowed-sip010 contract-caller sip009 nft-id recipient)
 )
 ;;
 ;; activity tracker
@@ -45,12 +45,15 @@
 (define-read-only (is-inactive)
 	(> (get-time) (+ activity-period (var-get last-tx-time))))
 	
+(define-data-var active-rule-set principal .no-rules)
+
 ;;
 ;; calls with context switching
 ;;
-(define-public (stx-transfer (amount uint) (recipient principal) (memo (optional (buff 34))))
+(define-public (stx-transfer (rules <rule-set-trait>) (amount uint) (recipient principal) (memo (optional (buff 34))))
 	(begin
-		(try! (is-allowed-stx (current-rules) amount recipient memo))
+		(try! (is-admin-calling))
+		(try! (is-allowed-stx rules amount recipient memo))
 		(var-set last-tx-time (get-time))
 		(as-contract (match memo
 			to-print (stx-transfer-memo? amount tx-sender recipient to-print)
@@ -61,6 +64,7 @@
 
 (define-public (extension-call (extension <extension-trait>) (payload (buff 2048)))
 	(begin
+		(try! (is-admin-calling))
 		(try! (is-allowed-extension (current-rules) extension payload))
 		(as-contract (contract-call? extension call payload))
 	)
@@ -72,6 +76,7 @@
 
 (define-public (sip010-transfer (amount uint) (recipient principal) (memo (optional (buff 34))) (sip010 <sip-010-trait>))
 	(begin
+		(try! (is-admin-calling))
 		(try! (is-allowed-sip010 sip010 amount recipient memo))
 		(contract-call? sip010 transfer amount (as-contract tx-sender) recipient memo)
 	)
@@ -80,6 +85,7 @@
 
 (define-public (sip009-transfer (nft-id uint) (recipient principal) (sip009 <sip-009-trait>))
 	(begin
+		(try! (is-admin-calling))
 		(try! (is-allowed-sip009 sip009 nft-id recipient))
 		(contract-call? sip009 transfer nft-id (as-contract tx-sender) recipient)
 	)
@@ -119,5 +125,7 @@
 (set-security-level u1)
 (enable-admin .inactive-observer true)
 (enable-admin tx-sender true)
+(enable-admin .smart-wallet-endpoint-no-rules true)
+
 ;; send 1000 ustx to the smart wallet
 (stx-transfer? u1000 tx-sender (as-contract tx-sender))
