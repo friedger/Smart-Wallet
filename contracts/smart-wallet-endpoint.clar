@@ -5,6 +5,4 @@
 
 
 (define-public (stx-transfer (details {amount: uint, to: principal}))
-    (let ((info (unwrap! (to-consensus-buff? details) err-invalid-payload)))
-        (contract-call? .smart-wallet stx-transfer .no-rules (get amount info) (get to info))
-    ))
+    (contract-call? .smart-wallet stx-transfer (get amount details) (get to details) none))

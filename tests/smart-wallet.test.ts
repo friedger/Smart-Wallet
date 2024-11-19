@@ -1,25 +1,20 @@
-import { CoreNodeEventType, projectFactory } from "@clarigen/core";
-import { filterEvents, txErr, txOk } from "@clarigen/test";
+import { projectFactory } from "@clarigen/core";
+import { txErr, txOk } from "@clarigen/test";
 import { Cl, ClarityType } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { accounts, project } from "../src/clarigen-types";
 
-const { smartWallet, smartWalletEndpoint } = projectFactory(project, "simnet");
+const { smartWallet } = projectFactory(project, "simnet");
 
 const transferAmount = 100;
-
-// Type guard to check if data has an amount property
-function hasAmountProperty(data: any): data is { amount: string } {
-  return (data as { amount: string }).amount !== undefined;
-}
 
 describe("test `stx-transfer` public function", () => {
   it("transfers 100 stx to wallet", async () => {
     const response = txOk(
       smartWallet.stxTransfer(transferAmount, accounts.wallet_2.address, null),
-      accounts.wallet_1.address
+      accounts.deployer.address
     );
-    console.log(response);
+    console.log("response", response);
     expect(response.result.type).toBe(ClarityType.ResponseOk);
   });
 
@@ -51,7 +46,7 @@ describe("test `stx-transfer` public function", () => {
       accounts.wallet_1.address
     );
 
-    expect(response.result).toBeErr(Cl.uint(101));
+    expect(response.result).toBeErr(Cl.uint(401));
   });
 
   // it("transfers fee to sponsor", async () => {

@@ -12,28 +12,9 @@ requirements = [
     { contract_id = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope" },
     { contract_id = "SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition" },
 ]
-[contracts.emergency-rules]
-path = 'contracts/rules/emergency-rules.clar'
-clarity_version = 2
-epoch = 2.1
 
 [contracts.extension-trait]
 path = 'contracts/extension-trait.clar'
-clarity_version = 2
-epoch = 2.1
-
-[contracts.inactive-observer]
-path = 'contracts/admins/inactive-observer.clar'
-clarity_version = 2
-epoch = 2.1
-
-[contracts.no-rules]
-path = 'contracts/rules/no-rules.clar'
-clarity_version = 2
-epoch = 2.1
-
-[contracts.rule-set-trait]
-path = 'contracts/rule-set-trait.clar'
 clarity_version = 2
 epoch = 2.1
 
@@ -47,25 +28,11 @@ path = 'contracts/smart-wallet-endpoint.clar'
 clarity_version = 2
 epoch = 2.1
 
-[contracts.smart-wallet-standard]
-path = 'contracts/smart-wallet-standard.clar'
-clarity_version = 2
-epoch = 2.1
-
-[contracts.smart-wallet-trait]
-path = 'contracts/smart-wallet-trait.clar'
-clarity_version = 2
-epoch = 2.1
-
 [contracts.sponsored-transfer]
 path = 'contracts/extensions/sponsored-transfer.clar'
 clarity_version = 2
 epoch = 2.1
 
-[contracts.standard-rules]
-path = 'contracts/rules/standard-rules.clar'
-clarity_version = 2
-epoch = 2.1
 [repl.analysis]
 passes = ['check_checker']
 
