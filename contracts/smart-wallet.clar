@@ -7,8 +7,8 @@
 (use-trait sip-010-trait 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard.sip-010-trait)
 (use-trait sip-009-trait 'SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait.nft-trait)
 
-(define-constant err-unauthorised (err u401))
-(define-constant err-forbidden (err u403))
+(define-constant err-unauthorised (err u4001))
+(define-constant err-forbidden (err u4003))
 
 (define-read-only (is-admin-calling)
 	(ok (asserts! (default-to false (map-get? admins contract-caller)) err-unauthorised))
