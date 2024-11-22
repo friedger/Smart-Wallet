@@ -1,6 +1,13 @@
 import { projectFactory } from "@clarigen/core";
 import { txErr, txOk } from "@clarigen/test";
-import { Cl, ClarityType } from "@stacks/transactions";
+import {
+  Cl,
+  ClarityType,
+  principalCV,
+  serializeCV,
+  tupleCV,
+  uintCV,
+} from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { accounts, deployments, project } from "../src/clarigen-types";
 import { tx } from "@hirosystems/clarinet-sdk";
@@ -39,6 +46,26 @@ describe("test `stx-transfer` public function", () => {
     );
 
     expect(response.result).toBeErr(Cl.uint(401));
+  });
+
+  it("try to unsafely transfer 100 sip10 tokens to wallet", async () => {
+    const sip010Contract = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope";
+
+    const response = txErr(
+      smartWallet.extensionCall(
+        accounts.deployer.address + ".unsafe-sip010-transfer",
+        serializeCV(
+          tupleCV({
+            amount: uintCV(transferAmount),
+            to: principalCV(accounts.wallet_2.address),
+            token: principalCV(sip010Contract),
+          })
+        )
+      ),
+      accounts.deployer.address
+    );
+
+    expect(response.result).toBeErr(Cl.uint(402));
   });
 
   it("transfers 1 Nft to wallet", async () => {

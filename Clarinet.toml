@@ -33,6 +33,11 @@ path = 'contracts/extensions/sponsored-transfer.clar'
 clarity_version = 2
 epoch = 2.1
 
+[contracts.unsafe-sip010-transfer]
+path = 'contracts/extensions/unsafe-sip010-transfer.clar'
+clarity_version = 2
+epoch = 3.0
+
 [repl.analysis]
 passes = ['check_checker']
 
