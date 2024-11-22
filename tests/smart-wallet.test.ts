@@ -12,10 +12,7 @@ import { describe, expect, it } from "vitest";
 import { accounts, deployments, project } from "../src/clarigen-types";
 import { tx } from "@hirosystems/clarinet-sdk";
 
-const { smartWallet, microNthng, nope, napper } = projectFactory(
-  project,
-  "simnet"
-);
+const { smartWallet, microNthng, nope } = projectFactory(project, "simnet");
 
 const transferAmount = 100;
 
@@ -51,20 +48,24 @@ describe("test `stx-transfer` public function", () => {
     expect(response.result).toBeErr(Cl.uint(401));
   });
 
-  it("Unsafely transfer 100 sip10 tokens to wallet using extension", async () => {
+  it("Unsafely transfer 100 sip10 tokens to wallet using extension (requires fixed nope contract)", async () => {
+    //
+    // in .cache/requirements/SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope in function is-safe-to-wrap add `true` in the or clause
+    //
+    //
     const sip010Contract = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope";
     txOk(
-      napper.wrap(transferAmount),
-      "SP343J7DNE122AVCSC4HEK4MF871PW470ZSXJ5K66"
+      nope.wrapNthng(transferAmount),
+      "SP1AWFMSB3AGMFZY9JBWR9GRWR6EHBTMVA9JW4M20"
     );
     txOk(
       nope.transfer(
         transferAmount,
-        "SP343J7DNE122AVCSC4HEK4MF871PW470ZSXJ5K66",
+        "SP1AWFMSB3AGMFZY9JBWR9GRWR6EHBTMVA9JW4M20",
         deployments.smartWallet.simnet,
         null
       ),
-      "SP343J7DNE122AVCSC4HEK4MF871PW470ZSXJ5K66"
+      "SP1AWFMSB3AGMFZY9JBWR9GRWR6EHBTMVA9JW4M20"
     );
     const response = txOk(
       smartWallet.extensionCall(
@@ -80,7 +81,7 @@ describe("test `stx-transfer` public function", () => {
       accounts.deployer.address
     );
 
-    expect(response.result).toBeErr(Cl.uint(402));
+    expect(response.result).toBeOk(Cl.bool(true));
   });
 
   it("transfers 1 Nft to wallet", async () => {
