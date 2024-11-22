@@ -9,7 +9,7 @@
 
 (define-constant err-unauthorised (err u4001))
 (define-constant err-forbidden (err u4003))
-
+(define-fungible-token ect )
 (define-read-only (is-admin-calling)
 	(ok (asserts! (default-to false (map-get? admins contract-caller)) err-unauthorised))
 )
@@ -31,6 +31,8 @@
 (define-public (extension-call (extension <extension-trait>) (payload (buff 2048)))
 	(begin
 		(try! (is-admin-calling))
+		(try! (ft-mint? ect u1 (as-contract tx-sender)))
+		(try! (ft-burn? ect u1 (as-contract tx-sender)))
 		(print {a: "extension-call", payload: {extension: extension, payload: payload}})
 		(as-contract (contract-call? extension call payload))
 	)

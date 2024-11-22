@@ -48,18 +48,7 @@ genesis:
 plan:
   batches:
     - id: 0
-      transactions: []
-      epoch: "2.0"
-    - id: 1
-      transactions: []
-      epoch: "2.05"
-    - id: 2
       transactions:
-        - emulated-contract-publish:
-            contract-name: sip013-semi-fungible-token-trait
-            emulated-sender: SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V
-            path: "./.cache/requirements/SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait.clar"
-            clarity-version: 1
         - emulated-contract-publish:
             contract-name: nft-trait
             emulated-sender: SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9
@@ -80,6 +69,22 @@ plan:
             emulated-sender: SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE
             path: "./.cache/requirements/SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard.clar"
             clarity-version: 1
+        - emulated-contract-publish:
+            contract-name: wrapped-nothing-v8
+            emulated-sender: SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ
+            path: "./.cache/requirements/SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.wrapped-nothing-v8.clar"
+            clarity-version: 1
+      epoch: "2.0"
+    - id: 1
+      transactions:
+        - emulated-contract-publish:
+            contract-name: sip013-semi-fungible-token-trait
+            emulated-sender: SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V
+            path: "./.cache/requirements/SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait.clar"
+            clarity-version: 1
+      epoch: "2.05"
+    - id: 2
+      transactions:
         - emulated-contract-publish:
             contract-name: extension-trait
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
@@ -102,86 +107,19 @@ plan:
             clarity-version: 2
       epoch: "2.1"
     - id: 3
-      transactions: []
-      epoch: "2.1"
-    - id: 4
-      transactions: []
-      epoch: "2.1"
-    - id: 5
-      transactions: []
-      epoch: "2.1"
-    - id: 6
-      transactions: []
-      epoch: "2.1"
-    - id: 7
-      transactions: []
-      epoch: "2.1"
-    - id: 8
-      transactions: []
-      epoch: "2.1"
-    - id: 9
-      transactions: []
-      epoch: "2.1"
-    - id: 10
-      transactions: []
-      epoch: "2.1"
-    - id: 11
-      transactions: []
-      epoch: "2.1"
-    - id: 12
-      transactions: []
-      epoch: "2.1"
-    - id: 13
-      transactions: []
-      epoch: "2.1"
-    - id: 14
-      transactions: []
-      epoch: "2.1"
-    - id: 15
       transactions:
         - emulated-contract-publish:
             contract-name: nope
             emulated-sender: SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ
             path: "./.cache/requirements/SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope.clar"
             clarity-version: 2
+        - emulated-contract-publish:
+            contract-name: napper
+            emulated-sender: SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ
+            path: "./.cache/requirements/SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.napper.clar"
+            clarity-version: 2
       epoch: "2.4"
-    - id: 16
-      transactions: []
-      epoch: "2.4"
-    - id: 17
-      transactions: []
-      epoch: "2.4"
-    - id: 18
-      transactions: []
-      epoch: "2.4"
-    - id: 19
-      transactions: []
-      epoch: "2.4"
-    - id: 20
-      transactions: []
-      epoch: "2.4"
-    - id: 21
-      transactions: []
-      epoch: "2.4"
-    - id: 22
-      transactions: []
-      epoch: "2.4"
-    - id: 23
-      transactions: []
-      epoch: "2.4"
-    - id: 24
-      transactions: []
-      epoch: "2.4"
-    - id: 25
-      transactions: []
-      epoch: "2.4"
-    - id: 26
-      transactions: []
-      epoch: "2.4"
-    - id: 27
-      transactions: []
-      epoch: "2.4"
-    - id: 28
+    - id: 4
       transactions:
         - emulated-contract-publish:
             contract-name: og-bitcoin-pizza-leather-edition
@@ -189,83 +127,11 @@ plan:
             path: "./.cache/requirements/SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition.clar"
             clarity-version: 2
       epoch: "2.5"
-    - id: 29
-      transactions: []
-      epoch: "2.5"
-    - id: 30
-      transactions: []
-      epoch: "2.5"
-    - id: 31
-      transactions: []
-      epoch: "2.5"
-    - id: 32
-      transactions: []
-      epoch: "2.5"
-    - id: 33
-      transactions: []
-      epoch: "2.5"
-    - id: 34
-      transactions: []
-      epoch: "2.5"
-    - id: 35
-      transactions: []
-      epoch: "2.5"
-    - id: 36
-      transactions: []
-      epoch: "2.5"
-    - id: 37
-      transactions: []
-      epoch: "2.5"
-    - id: 38
-      transactions: []
-      epoch: "2.5"
-    - id: 39
-      transactions: []
-      epoch: "2.5"
-    - id: 40
-      transactions: []
-      epoch: "2.5"
-    - id: 41
+    - id: 5
       transactions:
         - emulated-contract-publish:
             contract-name: unsafe-sip010-transfer
             emulated-sender: ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM
             path: contracts/extensions/unsafe-sip010-transfer.clar
             clarity-version: 2
-      epoch: "3.0"
-    - id: 42
-      transactions: []
-      epoch: "3.0"
-    - id: 43
-      transactions: []
-      epoch: "3.0"
-    - id: 44
-      transactions: []
-      epoch: "3.0"
-    - id: 45
-      transactions: []
-      epoch: "3.0"
-    - id: 46
-      transactions: []
-      epoch: "3.0"
-    - id: 47
-      transactions: []
-      epoch: "3.0"
-    - id: 48
-      transactions: []
-      epoch: "3.0"
-    - id: 49
-      transactions: []
-      epoch: "3.0"
-    - id: 50
-      transactions: []
-      epoch: "3.0"
-    - id: 51
-      transactions: []
-      epoch: "3.0"
-    - id: 52
-      transactions: []
-      epoch: "3.0"
-    - id: 53
-      transactions: []
       epoch: "3.0"

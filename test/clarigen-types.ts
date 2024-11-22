@@ -33,7 +33,7 @@ extensionTrait: {
   "non_fungible_tokens": [
     
   ],
-  "fungible_tokens":[],"epoch":"Epoch21","clarity_version":"Clarity2",
+  "fungible_tokens":[],"epoch":"Epoch30","clarity_version":"Clarity2",
   contractName: 'extension-trait',
   },
 microNthng: {
@@ -403,17 +403,17 @@ smartWallet: {
   constants: {
   errForbidden: {
     isOk: false,
-    value: 403n
+    value: 4_003n
   },
   errUnauthorised: {
     isOk: false,
-    value: 401n
+    value: 4_001n
   }
 },
   "non_fungible_tokens": [
     
   ],
-  "fungible_tokens":[],"epoch":"Epoch21","clarity_version":"Clarity2",
+  "fungible_tokens":[{"name":"ect"}],"epoch":"Epoch30","clarity_version":"Clarity2",
   contractName: 'smart-wallet',
   },
 smartWalletEndpoint: {
@@ -452,7 +452,7 @@ smartWalletEndpoint: {
   "non_fungible_tokens": [
     
   ],
-  "fungible_tokens":[],"epoch":"Epoch21","clarity_version":"Clarity2",
+  "fungible_tokens":[],"epoch":"Epoch30","clarity_version":"Clarity2",
   contractName: 'smart-wallet-endpoint',
   },
 sponsoredTransfer: {
@@ -483,14 +483,45 @@ sponsoredTransfer: {
   "non_fungible_tokens": [
     
   ],
-  "fungible_tokens":[],"epoch":"Epoch21","clarity_version":"Clarity2",
+  "fungible_tokens":[],"epoch":"Epoch30","clarity_version":"Clarity2",
   contractName: 'sponsored-transfer',
+  },
+unsafeSip010Transfer: {
+  "functions": {
+    call: {"name":"call","access":"public","args":[{"name":"payload","type":{"buffer":{"length":2048}}}],"outputs":{"type":{"response":{"ok":"bool","error":"uint128"}}}} as TypedAbiFunction<[payload: TypedAbiArg<Uint8Array, "payload">], Response<boolean, bigint>>
+  },
+  "maps": {
+    
+  },
+  "variables": {
+    errInvalidPayload: {
+  name: 'err-invalid-payload',
+  type: {
+    response: {
+      ok: 'none',
+      error: 'uint128'
+    }
+  },
+  access: 'constant'
+} as TypedAbiVariable<Response<null, bigint>>
+  },
+  constants: {
+  errInvalidPayload: {
+    isOk: false,
+    value: 500n
+  }
+},
+  "non_fungible_tokens": [
+    
+  ],
+  "fungible_tokens":[],"epoch":"Epoch30","clarity_version":"Clarity2",
+  contractName: 'unsafe-sip010-transfer',
   }
 } as const;
 
 export const accounts = {"deployer":{"address":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM","balance":"100000000000000"},"faucet":{"address":"STNHKEPYEPJ8ET55ZZ0M5A34J0R3N5FM2CMMMAZ6","balance":"100000000000000"},"wallet_1":{"address":"ST1SJ3DTE5DN7X54YDH5D64R3BCB6A2AG2ZQ8YPD5","balance":"100000000000000"},"wallet_2":{"address":"ST2CY5V39NHDPWSXMW9QDT3HC3GD6Q6XX4CFRK9AG","balance":"100000000000000"},"wallet_3":{"address":"ST2JHG361ZXG51QTKY2NQCVBPPRRE2KZB1HR05NNC","balance":"100000000000000"},"wallet_4":{"address":"ST2NEB84ASENDXKYGJPQW86YXQCEFEX2ZQPG87ND","balance":"100000000000000"},"wallet_5":{"address":"ST2REHHS5J3CERCRBEPMGH7921Q6PYKAADT7JP2VB","balance":"100000000000000"},"wallet_6":{"address":"ST3AM1A56AK2C1XAFJ4115ZSV26EB49BVQ10MGCS0","balance":"100000000000000"},"wallet_7":{"address":"ST3PF13W7Z0RRM42A8VZRVFQ75SV1K26RXEP8YGKJ","balance":"100000000000000"},"wallet_8":{"address":"ST3NBRSFKX28FQ2ZJ1MAKX58HKHSDGNV5N7R21XCP","balance":"100000000000000"}} as const;
 
-export const identifiers = {"commissionTrait":"SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.commission-trait","extensionTrait":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.extension-trait","microNthng":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.micro-nthng","nftTrait":"SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait","nope":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope","ogBitcoinPizzaLeatherEdition":"SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition","sip010TraitFtStandard":"SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard","sip013SemiFungibleTokenTrait":"SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait","smartWallet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet","smartWalletEndpoint":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet-endpoint","sponsoredTransfer":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sponsored-transfer"} as const
+export const identifiers = {"commissionTrait":"SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.commission-trait","extensionTrait":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.extension-trait","microNthng":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.micro-nthng","nftTrait":"SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait","nope":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope","ogBitcoinPizzaLeatherEdition":"SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition","sip010TraitFtStandard":"SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard","sip013SemiFungibleTokenTrait":"SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait","smartWallet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet","smartWalletEndpoint":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet-endpoint","sponsoredTransfer":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sponsored-transfer","unsafeSip010Transfer":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.unsafe-sip010-transfer"} as const
 
 export const simnet = {
   accounts,
@@ -499,7 +530,7 @@ export const simnet = {
 } as const;
 
 
-export const deployments = {"commissionTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.commission-trait","simnet":"SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.commission-trait","testnet":null,"mainnet":null},"extensionTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.extension-trait","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.extension-trait","testnet":null,"mainnet":null},"microNthng":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.micro-nthng","simnet":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.micro-nthng","testnet":null,"mainnet":null},"nftTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-trait","simnet":"SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait","testnet":null,"mainnet":"SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait"},"nope":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nope","simnet":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope","testnet":null,"mainnet":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope"},"ogBitcoinPizzaLeatherEdition":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.og-bitcoin-pizza-leather-edition","simnet":"SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition","testnet":null,"mainnet":"SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition"},"sip010TraitFtStandard":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip-010-trait-ft-standard","simnet":"SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard","testnet":null,"mainnet":"SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard"},"sip013SemiFungibleTokenTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip013-semi-fungible-token-trait","simnet":"SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait","testnet":null,"mainnet":"SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait"},"smartWallet":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet","testnet":null,"mainnet":null},"smartWalletEndpoint":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet-endpoint","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet-endpoint","testnet":null,"mainnet":null},"sponsoredTransfer":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sponsored-transfer","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sponsored-transfer","testnet":null,"mainnet":null}} as const;
+export const deployments = {"commissionTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.commission-trait","simnet":"SP3D6PV2ACBPEKYJTCMH7HEN02KP87QSP8KTEH335.commission-trait","testnet":null,"mainnet":null},"extensionTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.extension-trait","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.extension-trait","testnet":null,"mainnet":"SPEG9GC5SB98MFTJK79ZSF5WQSKB5RF24W3RR66P.extension-trait"},"microNthng":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.micro-nthng","simnet":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.micro-nthng","testnet":null,"mainnet":null},"nftTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nft-trait","simnet":"SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait","testnet":null,"mainnet":"SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait"},"nope":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.nope","simnet":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope","testnet":null,"mainnet":"SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope"},"ogBitcoinPizzaLeatherEdition":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.og-bitcoin-pizza-leather-edition","simnet":"SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition","testnet":null,"mainnet":"SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition"},"sip010TraitFtStandard":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip-010-trait-ft-standard","simnet":"SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard","testnet":null,"mainnet":"SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard"},"sip013SemiFungibleTokenTrait":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sip013-semi-fungible-token-trait","simnet":"SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait","testnet":null,"mainnet":"SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait"},"smartWallet":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet","testnet":null,"mainnet":"SPEG9GC5SB98MFTJK79ZSF5WQSKB5RF24W3RR66P.smart-wallet"},"smartWalletEndpoint":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet-endpoint","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.smart-wallet-endpoint","testnet":null,"mainnet":"SPEG9GC5SB98MFTJK79ZSF5WQSKB5RF24W3RR66P.smart-wallet-endpoint"},"sponsoredTransfer":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sponsored-transfer","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.sponsored-transfer","testnet":null,"mainnet":"SPEG9GC5SB98MFTJK79ZSF5WQSKB5RF24W3RR66P.sponsored-transfer"},"unsafeSip010Transfer":{"devnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.unsafe-sip010-transfer","simnet":"ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM.unsafe-sip010-transfer","testnet":null,"mainnet":"SPEG9GC5SB98MFTJK79ZSF5WQSKB5RF24W3RR66P.unsafe-sip010-transfer"}} as const;
 
 export const project = {
   contracts,

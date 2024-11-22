@@ -12,7 +12,10 @@ import { describe, expect, it } from "vitest";
 import { accounts, deployments, project } from "../src/clarigen-types";
 import { tx } from "@hirosystems/clarinet-sdk";
 
-const { smartWallet } = projectFactory(project, "simnet");
+const { smartWallet, microNthng, nope, napper } = projectFactory(
+  project,
+  "simnet"
+);
 
 const transferAmount = 100;
 
@@ -32,7 +35,7 @@ describe("test `stx-transfer` public function", () => {
     expect(response.result.type).toBe(ClarityType.ResponseOk);
   });
 
-  it("transfers 100 sip10 tokens to wallet", async () => {
+  it("try to unsafely transfers 100 sip10 tokens to wallet", async () => {
     const sip010Contract = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope";
 
     const response = txErr(
@@ -48,10 +51,22 @@ describe("test `stx-transfer` public function", () => {
     expect(response.result).toBeErr(Cl.uint(401));
   });
 
-  it("try to unsafely transfer 100 sip10 tokens to wallet", async () => {
+  it("Unsafely transfer 100 sip10 tokens to wallet using extension", async () => {
     const sip010Contract = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope";
-
-    const response = txErr(
+    txOk(
+      napper.wrap(transferAmount),
+      "SP343J7DNE122AVCSC4HEK4MF871PW470ZSXJ5K66"
+    );
+    txOk(
+      nope.transfer(
+        transferAmount,
+        "SP343J7DNE122AVCSC4HEK4MF871PW470ZSXJ5K66",
+        deployments.smartWallet.simnet,
+        null
+      ),
+      "SP343J7DNE122AVCSC4HEK4MF871PW470ZSXJ5K66"
+    );
+    const response = txOk(
       smartWallet.extensionCall(
         accounts.deployer.address + ".unsafe-sip010-transfer",
         serializeCV(
