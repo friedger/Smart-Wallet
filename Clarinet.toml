@@ -3,17 +3,32 @@ name = 'Smart-Wallet'
 description = ''
 authors = []
 telemetry = true
-cache_dir = "./.cache"
+cache_dir = '.\.cache'
 
-requirements = [
-    { contract_id = "SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard" },
-    { contract_id = "SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait" },
-    { contract_id = "SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait" },
-    { contract_id = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope" },
-    { contract_id = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.napper" },
-    { contract_id = "SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.wrapped-nothing-v8" },
-    { contract_id = "SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition" },
-]
+[[project.requirements]]
+contract_id = 'SP3FBR2AGK5H9QBDH3EEN6DF8EK8JY7RX8QJ5SVTE.sip-010-trait-ft-standard'
+
+[[project.requirements]]
+contract_id = 'SP2PABAF9FTAJYNFZH93XENAJ8FVY99RRM50D2JG9.nft-trait'
+
+[[project.requirements]]
+contract_id = 'SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait'
+
+[[project.requirements]]
+contract_id = 'SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope'
+
+[[project.requirements]]
+contract_id = 'SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.napper'
+
+[[project.requirements]]
+contract_id = 'SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.wrapped-nothing-v8'
+
+[[project.requirements]]
+contract_id = 'SP16GEW6P7GBGZG0PXRXFJEMR3TJHJEY2HJKBP1P5.og-bitcoin-pizza-leather-edition'
+[contracts.delegate-stx]
+path = 'contracts/delegate-stx.clar'
+clarity_version = 3
+epoch = 3.0
 
 [contracts.extension-trait]
 path = 'contracts/extension-trait.clar'
@@ -39,7 +54,6 @@ epoch = 2.1
 path = 'contracts/extensions/unsafe-sip010-transfer.clar'
 clarity_version = 2
 epoch = 3.0
-
 [repl.analysis]
 passes = ['check_checker']
 
