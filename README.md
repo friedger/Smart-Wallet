@@ -5,3 +5,5 @@ Smart Wallet is a smart contract that holds assets in the name of one or more us
 See [DOCS](https://stackerspool.gitbook.io/smart-wallet/).
 
 See [ROADMAP](ROADMAP).
+
+This project will integrate delegated stacking with the Smart Wallet.
