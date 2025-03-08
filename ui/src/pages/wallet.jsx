@@ -11,6 +11,8 @@ import StxSendModal from '../components/modal/stxsendmodal';
 import ConfirmedModal from '../components/modal/confirmedmodal';
 
 function Wallet({ clientConfig, setClientConfig }) {
+    const { address } = useParams();
+    const [smartWalletAddress, setSmartWalletAddress] = useState(address || userSession.loadUserData().profile.stxAddress[clientConfig.network] + '.smart-wallet');
   const [showAdvisory, setShowAdvisory] = useState(false);
   const [advisoryMessage, setAdvisoryMessage] = useState({
     title: '',
@@ -61,7 +63,7 @@ function Wallet({ clientConfig, setClientConfig }) {
       stx: smartwallet_stx,
       fungibleTokens: smartwallet_fungibleTokens,
       nonFungibleTokens: smartwallet_nonFungibleTokens,
-    } = await getSmartWalletBalance(clientConfig);
+    } = await getSmartWalletBalance(smartWalletAddress, clientConfig);
     const {
       stx: user_stx,
       fungibleTokens: user_fungibleTokens,
@@ -86,7 +88,7 @@ function Wallet({ clientConfig, setClientConfig }) {
     setUserNoneFungible(user_nonFungibleTokens);
   }
   async function initWalletInstance() {
-    const contract_info = await getWalletContractInfo(clientConfig);
+    const contract_info = await getWalletContractInfo(smartWalletAddress, clientConfig);
     setShowAdvisory(!contract_info?.found);
     setContractState(contract_info?.found);
     if (!contract_info?.found) {
@@ -155,6 +157,7 @@ function Wallet({ clientConfig, setClientConfig }) {
           setTx={setTx}
           setConfirmationModal={setConfirmationModal}
           contractState={contractState}
+          smartWalletAddress={smartWalletAddress}
         />
       )}
       {showSmartWalletModal && (
@@ -184,6 +187,7 @@ function Wallet({ clientConfig, setClientConfig }) {
           close={() => setConfirmationModal(false)}
           tx={tx}
           clientConfig={clientConfig}
+          smartWalletAddress={smartWalletAddress}
         />
       )}
     </>

@@ -16,6 +16,7 @@ function TabsComponent({
   setTx,
   smartWalletStx,
   smartWalletSBtc,
+  smartWalletAddress,
 }) {
   return (
     <div className="flex w-full flex-col">
@@ -40,6 +41,7 @@ function TabsComponent({
                   contractState={contractState}
                   setConfirmationModal={setConfirmationModal}
                   setTx={setTx}
+		  smartWalletAddress={smartWalletAddress}
                 />
               </CardBody>
             </Card>
@@ -63,6 +65,7 @@ function TabsComponent({
                   setTx={setTx}
                   smartWalletStx={smartWalletStx}
                   smartWalletSBtc={smartWalletSBtc}
+                  smartWalletAddress={smartWalletAddress}
                 />
               </CardBody>
             </Card>
@@ -84,6 +87,7 @@ function TabsComponent({
                   contractState={contractState}
                   setConfirmationModal={setConfirmationModal}
                   setTx={setTx}
+                  smartWalletAddress={smartWalletAddress}
                 />
               </CardBody>
             </Card>

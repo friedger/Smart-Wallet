@@ -1,9 +1,9 @@
 export const contracts = {
   delegateExtension: {
-    testnet: 'ST30RNTQNY63F6XR66J2Q3WP1THZT3VHZGYEXA9XX.ext-sbtc-transfer',
+    testnet: 'ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS.ext-sbtc-transfer',
   },
   delegateExtension: {
-    testnet: 'ST30RNTQNY63F6XR66J2Q3WP1THZT3VHZGYEXA9XX.ext-delegate-stx-pox-4',
+    testnet: 'ST3FFRX7C911PZP5RHE148YDVDD9JWVS6FZRA60VS.ext-delegate-stx-pox-4',
   },
 };
 
