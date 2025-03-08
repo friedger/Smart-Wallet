@@ -22,7 +22,7 @@ importers:
         specifier: ^2.15.1
         version: 2.15.1
       '@stacks/transactions':
-        specifier: ^6.12.0
+        specifier: ^6.2.1
         version: 6.17.0
       '@vitest/expect':
         specifier: ^3.0.8
@@ -31,13 +31,13 @@ importers:
         specifier: ^3.0.0
         version: 3.0.0
       typescript:
-        specifier: ^5.6.0
+        specifier: ^5.8.2
         version: 5.8.2
       vite:
-        specifier: ^6.1.0
+        specifier: ^6.2.1
         version: 6.2.1(@types/node@18.19.79)(yaml@2.7.0)
       vitest:
-        specifier: ^3.0.0
+        specifier: ^3.0.8
         version: 3.0.8(@types/node@18.19.79)(yaml@2.7.0)
       vitest-environment-clarinet:
         specifier: ^2.3.0
