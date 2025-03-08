@@ -9,10 +9,14 @@ import DepositModal from '../components/modal/depositModal';
 import SmartWalletDeployModal from '../components/modal/smartwalletdeploymodal';
 import StxSendModal from '../components/modal/stxsendmodal';
 import ConfirmedModal from '../components/modal/confirmedmodal';
+import { useParams } from 'react-router-dom';
+import { userSession } from '../user-session';
 
 function Wallet({ clientConfig, setClientConfig }) {
-    const { address } = useParams();
-    const [smartWalletAddress, setSmartWalletAddress] = useState(address || userSession.loadUserData().profile.stxAddress[clientConfig.network] + '.smart-wallet');
+  const { address } = useParams();
+  const [smartWalletAddress, setSmartWalletAddress] = useState(
+    address || userSession.loadUserData().profile.stxAddress[clientConfig.network] + '.smart-wallet'
+  );
   const [showAdvisory, setShowAdvisory] = useState(false);
   const [advisoryMessage, setAdvisoryMessage] = useState({
     title: '',
