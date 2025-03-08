@@ -1,7 +1,7 @@
 
-;; title: ext-sponsored-transfer
-;; version:
-;; summary:
+;; title: ext-sponsored-sbtc-transfer
+;; version: 1.0
+;; summary: Transfers SBTC tokens and pays fees to sponsor if any
 ;; description:
 
 (define-constant err-invalid-payload (err u500))
