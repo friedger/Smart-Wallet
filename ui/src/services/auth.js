@@ -1,21 +1,20 @@
-import { AppConfig, showConnect, UserSession } from "@stacks/connect";
+import { showConnect } from '@stacks/connect';
 import {
-  STACKS_TESTNET,
+  STACKS_DEVNET,
   STACKS_MAINNET,
   STACKS_MOCKNET,
-  STACKS_DEVNET,
+  STACKS_TESTNET,
   StacksNetworks,
-} from "@stacks/network";
-const appConfig = new AppConfig(["store_write", "publish_data"]);
-export const userSession = new UserSession({ appConfig });
+} from '@stacks/network';
+import { userSession } from '../user-session';
 
 export function authenticate() {
   return showConnect({
     appDetails: {
-      name: "Smart Wallet",
-      icon: "https://smart-wallet-blond.vercel.app/logo512.png",
+      name: 'Smart Wallet',
+      icon: 'https://smart-wallet-blond.vercel.app/logo512.png',
     },
-    redirectTo: "/",
+    redirectTo: '/',
     onFinish: () => {
       window.location.reload();
     },
@@ -24,7 +23,7 @@ export function authenticate() {
 }
 
 export function disconnect() {
-  userSession.signUserOut("/");
+  userSession.signUserOut('/');
 }
 
 export function isUserAuthed() {
@@ -33,14 +32,12 @@ export function isUserAuthed() {
 
 export function getAddress(network) {
   const networkVal = {
-    testnet: "testnet",
-    devnet: "testnet",
-    mainnet: "mainnet",
-    mocknet: "mainnet",
+    testnet: 'testnet',
+    devnet: 'testnet',
+    mainnet: 'mainnet',
+    mocknet: 'mainnet',
   }[network];
-  return isUserAuthed()
-    ? userSession.loadUserData().profile.stxAddress[networkVal]
-    : "";
+  return isUserAuthed() ? userSession.loadUserData().profile.stxAddress[networkVal] : '';
 }
 
 export function getNetworks() {

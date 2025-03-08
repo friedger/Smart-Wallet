@@ -13,6 +13,7 @@
   },
   "author": "",
   "license": "ISC",
+  "prettier": "@stacks/prettier-config",
   "dependencies": {
     "@clarigen/cli": "^2.1.2",
     "@hirosystems/clarinet-sdk": "^2.15.1",
@@ -27,7 +28,8 @@
   },
   "devDependencies": {
     "@clarigen/core": "^2.1.2",
-    "@clarigen/test": "^2.1.2"
+    "@clarigen/test": "^2.1.2",
+    "@stacks/prettier-config": "0.0.10"
   },
   "pnpm": {
     "overrides": {

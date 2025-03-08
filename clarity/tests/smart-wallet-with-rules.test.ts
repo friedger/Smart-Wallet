@@ -5,7 +5,7 @@ import {
   Cl,
   ClarityType,
   standardPrincipalCV,
-  trueCV,
+  trueCV
 } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import {
@@ -116,7 +116,7 @@ it("checks that set-security-level is working", async () => {
     accounts.deployer.address
   );
 
-  expect(setSecurityLevel.result.type).toBe(ClarityType.ResponseOk);
+  expect(setSecurityLevel.result).toBeOk(trueCV());
 });
 
 it("checks that is-admin-calling is working", async () => {

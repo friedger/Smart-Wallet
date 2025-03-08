@@ -12,7 +12,7 @@ import {
   standardPrincipalCV,
   stringAsciiCV,
   trueCV,
-  uintCV,
+  uintCV
 } from "@stacks/transactions";
 import { describe, expect, it } from "vitest";
 import { deployments } from "../../clarigen/src/clarigen-types";

@@ -37,6 +37,10 @@ contract_id = 'SP32AEEF6WW5Y0NMJ1S8SBSZDAY8R5J32NBZFPKKZ.nope'
 
 [[project.requirements]]
 contract_id = 'SPDBEG5X8XD50SPM1JJH0E5CTXGDV5NJTKAKKR5V.sip013-semi-fungible-token-trait'
+
+[[project.requirements]]
+contract_id = 'SM3VDXK3WZZSA84XXFKAFAF15NNZX32CTSG82JFQ4.sbtc-token'
+
 [contracts.emergency-rules]
 path = 'contracts/rules/emergency-rules.clar'
 clarity_version = 3
@@ -51,6 +55,12 @@ epoch = 3.1
 path = 'contracts/extensions/ext-sponsored-transfer.clar'
 clarity_version = 3
 epoch = 3.1
+
+[contracts.ext-sponsored-sbtc-transfer]
+path = 'contracts/extensions/ext-sponsored-sbtc-transfer.clar'
+clarity_version = 3
+epoch = 3.1
+
 
 [contracts.ext-unsafe-sip010-transfer]
 path = 'contracts/extensions/ext-unsafe-sip010-transfer.clar'

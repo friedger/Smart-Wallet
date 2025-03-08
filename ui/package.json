@@ -9,8 +9,10 @@
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview"
   },
+  "prettier": "@stacks/prettier-config",
   "dependencies": {
     "@heroui/react": "^2.6.14",
+    "@stacks/common": "^7.0.2",
     "@stacks/connect": "^7.0.2",
     "@stacks/connect-react": "^23.0.9",
     "@stacks/network": "^7.0.2",
@@ -24,6 +26,7 @@
     "react-router-dom": "^7.3.0"
   },
   "devDependencies": {
+    "@stacks/prettier-config": "0.0.10",
     "@types/react": "^18.2.15",
     "@types/react-dom": "^18.2.7",
     "@vitejs/plugin-react": "^4.0.3",
