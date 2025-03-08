@@ -2,6 +2,7 @@ import React from 'react';
 import DelegateStxPox4 from './extensions/delegate-stx-pox4';
 import { Accordion, AccordionItem } from '@heroui/react';
 import { PiLockKey } from 'react-icons/pi';
+import SBtcTransfer from './extensions/sbtc-transfer';
 
 const Extensions = ({
   clientConfig,
@@ -10,6 +11,7 @@ const Extensions = ({
   setTx,
   smartWalletStx,
   smartWalletSBtc,
+  smartWalletAddress,
 }) => {
   return (
     <div>
@@ -29,7 +31,7 @@ const Extensions = ({
             setConfirmationModal={setConfirmationModal}
             setTx={setTx}
             smartWalletStx={smartWalletStx}
-	    smartWalletAddress={smartWalletAddress} 
+            smartWalletAddress={smartWalletAddress}
           />
         </AccordionItem>
         <AccordionItem
@@ -47,7 +49,7 @@ const Extensions = ({
             setConfirmationModal={setConfirmationModal}
             setTx={setTx}
             smartWalletSBtc={smartWalletSBtc}
-            smartWalletAddress={smartWalletAddress} 
+            smartWalletAddress={smartWalletAddress}
           />
         </AccordionItem>
       </Accordion>

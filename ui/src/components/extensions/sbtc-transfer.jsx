@@ -13,17 +13,23 @@ import {
 import React, { useState } from 'react';
 import { PiArrowArcLeftThin } from 'react-icons/pi';
 import { network } from '../../lib/constants';
-import { contracts } from '../../lib/contracts';
+import { contracts, EXTENSION_CALL_TOKEN_NAME } from '../../lib/contracts';
 import { userSession } from '../../user-session';
+import { submitToSponsor } from '../../lib/sponsoring';
 
-const SBtcTransfer = ({ clientConfig, setConfirmationModal, setTx, smartWalletSBtc }) => {
-  const [amount, setAmount] = useState(0.1);
+const SBtcTransfer = ({
+  clientConfig,
+  setConfirmationModal,
+  setTx,
+  smartWalletSBtc,
+  smartWalletAddress,
+}) => {
+  const [amount, setAmount] = useState();
   const [recipient, setRecipient] = useState('');
   const [fees, setFees] = useState(0);
 
   const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
 
-  console.log(clientConfig);
   function transferSBtc() {
     const transferAmount = Math.round(amount * 1_00_000_000);
     const feesAmount = Math.round(fees * 1_00_000_000);
@@ -38,27 +44,38 @@ const SBtcTransfer = ({ clientConfig, setConfirmationModal, setTx, smartWalletSB
       )
     );
 
-    const smartWalletAddress = clientConfig?.smartWalletAddress;
     const [contractAddress, contractName] = smartWalletAddress.split('.');
-    const sbtTransferExtension = contracts.sbtTransferExtension[clientConfig?.chain];
-
+    const sbtcTransferExtension = contracts.sbtcTransferExtension[clientConfig?.chain];
+    const sbtcContract = contracts.sbtcContract[clientConfig?.chain];
+    const sbtcTokenName = contracts.sbtcTokenName[clientConfig?.chain];
+    const sponsored = feesAmount > 0;
     openContractCall({
       contractAddress,
       contractName,
       functionName: 'extension-call',
-      functionArgs: [principalCV(sbtTransferExtension), bufferCV(serializedPayload)],
+      functionArgs: [principalCV(sbtcTransferExtension), bufferCV(serializedPayload)],
       network: network(clientConfig?.chain),
       stxAddress: userAddress,
+      sponsored,
       postConditionMode: PostConditionMode.Deny,
       postConditions: [
         Pc.principal(smartWalletAddress)
           .willSendEq(1)
           .ft(smartWalletAddress, EXTENSION_CALL_TOKEN_NAME),
-        Pc.principal(smartWalletAddress).willSendLte(transferAmount).ft(sbtcContract, sbtTokenName),
+        Pc.principal(smartWalletAddress)
+          .willSendLte(transferAmount + feesAmount)
+          .ft(sbtcContract, sbtcTokenName),
       ],
-      onFinish: ({ txId }) => {
-        setTx(txId);
-        setConfirmationModal(true);
+      onFinish: ({ txId, stacksTransaction }) => {
+        console.log({ txId, stacksTransaction });
+        if (sponsored) {
+          const { txid } = submitToSponsor(stacksTransaction);
+          setTx(txid);
+          setConfirmationModal(true);
+        } else {
+          setTx(txId);
+          setConfirmationModal(true);
+        }
       },
       onCancel: () => {
         console.log('Transfer canceled!');

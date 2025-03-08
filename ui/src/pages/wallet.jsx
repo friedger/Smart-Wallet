@@ -146,6 +146,7 @@ function Wallet({ clientConfig, setClientConfig }) {
           setTx={setTx}
           smartWalletStx={smartWalletStx}
           smartWalletSBtc={smartWalletSBtc}
+          smartWalletAddress={smartWalletAddress}
         />
       </div>
 

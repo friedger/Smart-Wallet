@@ -1,19 +1,16 @@
 import {
   CoreNodeEventType,
   cvToValue,
-  hexToBytes,
-  projectFactory,
+  projectFactory
 } from "@clarigen/core";
 import { filterEvents, txOk } from "@clarigen/test";
 import { tx } from "@hirosystems/clarinet-sdk";
 import {
   boolCV,
-  bufferCV,
   noneCV,
   principalCV,
   trueCV,
-  tupleCV,
-  uintCV,
+  uintCV
 } from "@stacks/transactions";
 import { describe, expect, test } from "vitest";
 import {
@@ -21,7 +18,6 @@ import {
   deployments,
   project,
 } from "../../clarigen/src/clarigen-types";
-import { none } from "@stacks/transactions/dist/cl";
 
 const { smartWalletEndpoint } = projectFactory(project, "simnet");
 
