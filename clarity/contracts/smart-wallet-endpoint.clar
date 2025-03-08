@@ -11,6 +11,11 @@
 (define-public (stx-transfer-sponsored (sm <wallet-trait>) (details {amount: uint, to: principal, fees: uint}))
     (contract-call? sm extension-call .ext-sponsored-transfer (unwrap! (to-consensus-buff? details) err-invalid-payload))
 )
+
+(define-public (sbtc-transfer-sponsored (sm <wallet-trait>) (details {amount: uint, to: principal, fees: uint}))
+    (contract-call? sm extension-call .ext-sponsored-sbtc-transfer (unwrap! (to-consensus-buff? details) err-invalid-payload))
+)
+
 (define-public (transfer-unsafe-sip-010-token (sm <wallet-trait>) (details {amount: uint, to: principal, token: <sip-010-token>}))
     (contract-call? sm extension-call .ext-unsafe-sip010-transfer (unwrap! (to-consensus-buff? details) err-invalid-payload))
 )
