@@ -31,8 +31,6 @@ const DelegateStxPox4 = ({
   const [lockPeriod, setLockPeriod] = useState(1);
 
   const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
-  const contractName = 'smart-wallet';
-  const smartWalletAddress = `${userAddress}.${contractName}`;
 
   function delegate() {
     const delegateAmount = amount * 1000000;
