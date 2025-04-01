@@ -16,6 +16,7 @@ import { Code, Tooltip } from '@heroui/react';
 
 function Wallet({ clientConfig, setClientConfig }) {
     const { address } = useParams();
+
     const [smartWalletAddress, setSmartWalletAddress] = useState(address || userSession.loadUserData().profile.stxAddress[clientConfig.network] + '.smart-wallet');
 
     const [showAdvisory, setShowAdvisory] = useState(false);
@@ -71,21 +72,29 @@ function Wallet({ clientConfig, setClientConfig }) {
         setUserFungible(user_fungibleTokens);
         setUserNoneFungible(user_nonFungibleTokens);
     }
+
     async function initWalletInstance() {
-        const contract_info = await getWalletContractInfo(smartWalletAddress, clientConfig);
-        setShowAdvisory(!contract_info?.found);
-        setContractState(contract_info?.found);
-        if (!contract_info?.found) {
+        const { found, address, error, code } = await getWalletContractInfo(smartWalletAddress, clientConfig);
+        if (found) {
+            setSmartWalletAddress(address);
+            return;
+        }
+        setShowAdvisory(!found);
+        setContractState(found);
+        if (!found) {
             setAdvisoryMessage({ msg: 'Seems you dont have smart wallet contract deployed yet.', reason: 'Deploy Required', severity: 'secondary' });
             setShowSmartWallettModal(true);
         };
-        if (contract_info?.error) { setAdvisoryMessage({ msg: contract_info?.error, reason: contract_info?.code, severity: 'danger' }); };
+        if (error) { setAdvisoryMessage({ msg: error, reason: code, severity: 'danger' }); };
     }
 
     useEffect(() => {
-        initWalletbalance();
         initWalletInstance();
     }, [])
+
+    useEffect(() => {
+        initWalletbalance();
+    }, [smartWalletAddress])
 
     return (
         <>

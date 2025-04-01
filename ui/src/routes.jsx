@@ -14,7 +14,6 @@ function AppRoutes() {
 
     const [clientConfig, setClientConfig] = useState({ chain: chain, network: network, api: api, explorer: explorer });
 
-
     return (
         <Routes>
 

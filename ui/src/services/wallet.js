@@ -4,6 +4,7 @@ import { cvToValue, fetchCallReadOnlyFunction, hexToCV, uintCV } from "@stacks/t
 import { Buffer } from "buffer";
 import { network } from "../lib/constants";
 import { clientFromNetwork } from "@stacks/network";
+import { getFromGaia } from "./storage";
 
 export async function getSmartWalletBalance(address, clientConfig) {
     const { data, status } = await axios.get(`${clientConfig?.api}/extended/v1/address/${address}/balances`);
@@ -57,10 +58,15 @@ export async function getUserBalance(clientConfig) {
 export async function getWalletContractInfo(address, clientConfig) {
     let result;
     try {
-        const contractInfoData = await (await axios.get(`${clientConfig?.api}/extended/v2/smart-contracts/status?contract_id=${address}`)).data
-        const contractInfo = contractInfoData[address];
-        console.log({ contractInfo });
-        result = { found: contractInfo?.found && contractInfo?.result?.status === 'success', ...contractInfo?.result };
+        const { success, fileContent } = await getFromGaia({ fileName: 'config.json' });
+        if (success && fileContent?.address === address) {
+            result = fileContent;
+        } else {
+            const contractInfoData = await (await axios.get(`${clientConfig?.api}/extended/v2/smart-contracts/status?contract_id=${address}`)).data
+            const contractInfo = contractInfoData[address];
+            console.log({ contractInfoData, contractInfo });
+            result = { found: contractInfo?.found && contractInfo?.result?.status === 'success', ...contractInfo?.result };
+        }
     } catch (error) {
         console.log({ error });
         result = { found: false, error: error.message, code: error?.code };
