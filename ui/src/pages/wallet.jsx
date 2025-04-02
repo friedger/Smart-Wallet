@@ -75,8 +75,6 @@ function Wallet({ clientConfig, setClientConfig }) {
 
     async function initWalletInstance() {
         let smartWallet, contractStat;
-        const res = await getConfig();
-
         if (Boolean(address)) {
             const { found } = await getWalletContractInfo(address, clientConfig);
             if (found) {
@@ -84,6 +82,7 @@ function Wallet({ clientConfig, setClientConfig }) {
                 contractStat = found;
             }
         } else {
+            const res = await getConfig();
             if (res?.found && res?.chain === clientConfig?.chain) {
                 smartWallet = res?.address;
                 contractStat = res?.found;
