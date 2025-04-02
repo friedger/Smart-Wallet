@@ -55,21 +55,30 @@ export async function getUserBalance(clientConfig) {
     return { stx: { ...stx, rate }, fungibleTokens, nonFungibleTokens: nonFungibleTokens.flat() };
 }
 
+export async function getConfig() {
+    let result;
+    const { success, fileContent } = await getFromGaia({ fileName: 'config.json' });
+    if (success) {
+        result = fileContent;
+    }
+    return result;
+}
+
 export async function getWalletContractInfo(address, clientConfig) {
     let result;
+
     try {
-        const { success, fileContent } = await getFromGaia({ fileName: 'config.json' });
-        if (success && fileContent?.address === address) {
-            result = fileContent;
-        } else {
-            const contractInfoData = await (await axios.get(`${clientConfig?.api}/extended/v2/smart-contracts/status?contract_id=${address}`)).data
-            const contractInfo = contractInfoData[address];
-            console.log({ contractInfoData, contractInfo });
-            result = { found: contractInfo?.found && contractInfo?.result?.status === 'success', ...contractInfo?.result };
-        }
+
+        const response = (await axios.get(`${clientConfig?.api}/extended/v2/smart-contracts/status?contract_id=${address}`)).data;
+        const contractInfo = response[address];
+        result = { found: contractInfo?.found && contractInfo?.result?.status === 'success', ...contractInfo?.result, address };
+        console.log({ response, contractInfo, result });
+
     } catch (error) {
-        console.log({ error });
-        result = { found: false, error: error.message, code: error?.code };
+
+        result = { found: false, error: error.message, code: error?.code, address };
+        console.log({ error, result });
+
     }
 
     return result;

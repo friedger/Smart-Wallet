@@ -4,7 +4,7 @@ import SmartWalletContractAdvisory from '../components/alert/smartWalletContract
 import { GrDeploy } from 'react-icons/gr';
 import SmartWalletBalance from '../components/smartwalletbalance';
 import Tabs from '../components/tabs';
-import { getSmartWalletBalance, getUserBalance, getWalletContractInfo } from '../services/wallet';
+import { getConfig, getSmartWalletBalance, getUserBalance, getWalletContractInfo } from '../services/wallet';
 import DepositModal from '../components/modal/depositModal';
 import SmartWalletDeployModal from '../components/modal/smartwalletdeploymodal';
 import StxSendModal from '../components/modal/stxsendmodal';
@@ -16,8 +16,9 @@ import { Code, Tooltip } from '@heroui/react';
 
 function Wallet({ clientConfig, setClientConfig }) {
     const { address } = useParams();
+    const authedUserContract = `${userSession.loadUserData().profile.stxAddress[clientConfig.network]}.smart-wallet`;
 
-    const [smartWalletAddress, setSmartWalletAddress] = useState(address || userSession.loadUserData().profile.stxAddress[clientConfig.network] + '.smart-wallet');
+    const [smartWalletAddress, setSmartWalletAddress] = useState();
 
     const [showAdvisory, setShowAdvisory] = useState(false);
     const [advisoryMessage, setAdvisoryMessage] = useState({ title: '', msg: '', reason: '', severity: '' });
@@ -39,6 +40,8 @@ function Wallet({ clientConfig, setClientConfig }) {
 
     const [tx, setTx] = useState('');
 
+    console.log({ smartWalletAddress, address: Boolean(address), authedUserContract });
+
     function formatNumber(num) {
         if (isNaN(num)) return 0.0;
 
@@ -58,11 +61,9 @@ function Wallet({ clientConfig, setClientConfig }) {
         setShowSmartWallettModal(true);
     }
 
-    async function initWalletbalance() {
-        const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(smartWalletAddress, clientConfig);
+    async function initWalletbalance(contractAddress) {
+        const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(contractAddress, clientConfig);
         const { stx: user_stx, fungibleTokens: user_fungibleTokens, nonFungibleTokens: user_nonFungibleTokens } = await getUserBalance(clientConfig);
-
-        console.log({ smartwallet_stx, smartwallet_fungibleTokens, smartwallet_nonFungibleTokens, user_stx, user_fungibleTokens, user_nonFungibleTokens });
 
         setSmartWalletStx(smartwallet_stx);
         setSmartWalletFungible(smartwallet_fungibleTokens);
@@ -74,27 +75,36 @@ function Wallet({ clientConfig, setClientConfig }) {
     }
 
     async function initWalletInstance() {
-        const { found, address, error, code } = await getWalletContractInfo(smartWalletAddress, clientConfig);
-        if (found) {
-            setSmartWalletAddress(address);
-            return;
+        let smartWallet, contractStat;
+        const res = await getConfig();
+
+        if (Boolean(address)) {
+            const { found } = await getWalletContractInfo(address, clientConfig);
+            if (found) {
+                smartWallet = address;
+                contractStat = found;
+            }
+        } else {
+            if (res?.found) {
+                smartWallet = res?.address;
+                contractStat = res?.found;
+            } else {
+                smartWallet = '';
+                contractStat = false;
+            }
         }
-        setShowAdvisory(!found);
-        setContractState(found);
-        if (!found) {
-            setAdvisoryMessage({ msg: 'Seems you dont have smart wallet contract deployed yet.', reason: 'Deploy Required', severity: 'secondary' });
-            setShowSmartWallettModal(true);
-        };
-        if (error) { setAdvisoryMessage({ msg: error, reason: code, severity: 'danger' }); };
+        console.log({ smartWallet, contractStat });
+        setSmartWalletAddress(smartWallet);
+        setContractState(contractStat);
+        setAdvisoryMessage({ msg: 'Seems you dont have smart wallet contract deployed yet.', reason: 'Deploy Required', severity: 'secondary' });
+        setShowAdvisory(!contractStat);
+        setShowSmartWallettModal(!contractStat);
+        initWalletbalance(smartWallet);
     }
 
     useEffect(() => {
         initWalletInstance();
     }, [])
-
-    useEffect(() => {
-        initWalletbalance();
-    }, [smartWalletAddress])
 
     return (
         <>

@@ -52,6 +52,7 @@ function SmartWalletDeployModal({ clientConfig, show, close, setTx, setConfirmat
 
     async function configSmartWalletAddress() {
         const validateOverrideContractAddress = await getWalletContractInfo(overrideContractAddress, clientConfig);
+        console.log({ overrideContractAddress, validateOverrideContractAddress });
         const { found } = validateOverrideContractAddress;
         if (!found) {
             setErrorMsg({
