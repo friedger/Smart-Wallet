@@ -113,7 +113,7 @@ function Wallet({ clientConfig, setClientConfig }) {
 
     return (
         <>
-            <div className="w-full flex flex-col justify-center gap-6 items-center mt-10 p-2 sm:p-[5%] md:p-[10%] lg:p-[10%]">
+            <div className="w-full flex flex-col justify-center gap-4 items-center mt-10 p-2 sm:p-[5%] md:p-[10%] lg:p-[10%]">
 
                 <Header clientConfig={clientConfig} setClientConfig={setClientConfig} />
 
@@ -128,7 +128,7 @@ function Wallet({ clientConfig, setClientConfig }) {
                     </div>
                 }
 
-                <SmartWalletBalance balance={formatNumber(parseFloat(smartWalletStx?.balance) / 1000000)} stx={smartWalletStx} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} />
+                <SmartWalletBalance balance={formatNumber(parseFloat(smartWalletStx?.balance) / 1000000)} stx={smartWalletStx} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} clientConfig={clientConfig} />
 
                 <Tabs clientConfig={clientConfig} fungibleToken={smartWalletFungibleToken} nonFungibleToken={smartWalletNonFungibleToken} contractState={contractState} setConfirmationModal={setConfirmationModal} setTx={setTx} smartWalletStx={smartWalletStx} smartWalletAddress={smartWalletAddress} />
 
