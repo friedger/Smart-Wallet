@@ -145,8 +145,7 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
 
     useEffect(() => {
         const actualBalance = umicrostoActualValue(selectedToken?.balance || 0, selectedToken?.decimal || 0);
-        console.log(contractState && actualBalance > parseFloat(amount), { actualBalance, contractState, amount });
-        if (contractState && actualBalance > amount) {
+        if (contractState && actualBalance > amount && amount > 0) {
             setIsDisabled(false);
         } else {
             setIsDisabled(true);

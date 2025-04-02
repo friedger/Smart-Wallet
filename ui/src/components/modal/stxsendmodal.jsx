@@ -55,7 +55,6 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
 
     useEffect(() => {
         const actualBalance = umicrostoActualValue(stx?.balance, 6);
-        console.log(contractState && amount > 0 && actualBalance > amount, { actualBalance, contractState, amount });
         if (contractState && amount > 0 && actualBalance > amount) {
             setIsDisabled(false);
         } else {
