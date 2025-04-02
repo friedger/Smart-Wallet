@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseModal from './basemodal';
 import { Alert, Button, Chip, Code, Input, ModalBody, ModalHeader } from '@heroui/react';
 import { RiLuggageDepositFill } from 'react-icons/ri';
@@ -6,6 +6,7 @@ import { openContractCall, openSTXTransfer } from '@stacks/connect';
 import { bufferCVFromString, noneCV, optionalCVOf, Pc, PostConditionMode, principalCV, uintCV } from '@stacks/transactions';
 import { userSession } from '../../user-session';
 import { network } from '../../lib/constants';
+import { umicrostoActualValue } from '../../lib/operator';
 
 const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWalletAddress, setTx, setConfirmationModal }) => {
     const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
@@ -13,6 +14,7 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
     const [amount, setAmount] = useState(0);
     const [address, setAddress] = useState(userAddress);
     const [memo, setMemo] = useState('');
+    const [isDiabled, setIsDisabled] = useState(false);
 
 
     function sendStx() {
@@ -51,6 +53,16 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
         return num;
     }
 
+    useEffect(() => {
+        const actualBalance = umicrostoActualValue(stx?.balance, 6);
+        console.log(contractState && amount > 0 && actualBalance > amount, { actualBalance, contractState, amount });
+        if (contractState && amount > 0 && actualBalance > amount) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [stx, amount])
+
     return (
         <BaseModal baseModalsOpen={show} baseModalOnClose={close}>
             <ModalHeader className="flex flex-col gap-1">Debit Smart Wallet</ModalHeader>
@@ -77,7 +89,7 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
 
                 </div>
 
-                <Button color="warning" variant="shadow" isDisabled={!contractState} onPress={sendStx}>
+                <Button color="warning" variant="shadow" isDisabled={isDiabled} onPress={sendStx}>
                     <RiLuggageDepositFill color='white' />
                 </Button>
 
