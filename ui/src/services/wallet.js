@@ -10,7 +10,6 @@ export async function getSmartWalletBalance(address, clientConfig) {
     const { data, status } = await axios.get(`${clientConfig?.api}/extended/v1/address/${address}/balances`);
     const { fungible_tokens, non_fungible_tokens, stx } = data;
 
-    const rate = (await axios.get(`https://api.diadata.org/v1/assetQuotation/Stacks/0x0000000000000000000000000000000000000000`)).data;
     const fungibleTokens = Object.keys(fungible_tokens).map((key) => {
         return { contract_id: key, ...fungible_tokens[key], name: key.split('::')[1], contract_principal: key.split('::')[0] };
     });
@@ -27,7 +26,7 @@ export async function getSmartWalletBalance(address, clientConfig) {
         })
         return asset;
     }));
-    return { stx: { ...stx, rate }, fungibleTokens, nonFungibleTokens: nonFungibleTokens.flat() };
+    return { stx: { ...stx }, fungibleTokens, nonFungibleTokens: nonFungibleTokens.flat() };
 }
 
 export async function getUserBalance(clientConfig) {
@@ -35,7 +34,6 @@ export async function getUserBalance(clientConfig) {
     const { data, status } = await axios.get(`${clientConfig?.api}/extended/v1/address/${userAddress}/balances`);
     const { fungible_tokens, non_fungible_tokens, stx } = data;
 
-    const rate = (await axios.get(`https://api.diadata.org/v1/assetQuotation/Stacks/0x0000000000000000000000000000000000000000`)).data;
     const fungibleTokens = Object.keys(fungible_tokens).map((key) => {
         return { contract_id: key, ...fungible_tokens[key], name: key.split('::')[1] };
     });
@@ -52,7 +50,7 @@ export async function getUserBalance(clientConfig) {
         })
         return asset;
     }));
-    return { stx: { ...stx, rate }, fungibleTokens, nonFungibleTokens: nonFungibleTokens.flat() };
+    return { stx: { ...stx }, fungibleTokens, nonFungibleTokens: nonFungibleTokens.flat() };
 }
 
 export async function getConfig() {

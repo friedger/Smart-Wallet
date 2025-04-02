@@ -30,3 +30,5 @@ export const storageProvider = {
     ipfs: { replace: "https://ipfs.tech/", at: "ipfs:/" },
     gaia: ""
 };
+
+export const sbtcContractAddress = { mainnet: '', testnet: 'SN69P7RZRKK8ERQCCABHT2JWKB2S4DHH9H74231T.sbtc-token::sbtc-token' };

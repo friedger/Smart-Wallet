@@ -11,8 +11,10 @@ import StxSendModal from '../components/modal/stxsendmodal';
 import ConfirmedModal from '../components/modal/confirmedmodal';
 import { useParams } from 'react-router-dom';
 import { userSession } from '../user-session';
-import { explorer } from '../lib/constants';
+import { explorer, sbtcContractAddress } from '../lib/constants';
 import { Code, Tooltip } from '@heroui/react';
+import axios from 'axios';
+import { getRates } from '../services/rates';
 
 function Wallet({ clientConfig, setClientConfig }) {
     const { address } = useParams();
@@ -33,6 +35,8 @@ function Wallet({ clientConfig, setClientConfig }) {
     const [smartWalletFungibleToken, setSmartWalletFungible] = useState([]);
     const [smartWalletNonFungibleToken, setSmartWalletNoneFungible] = useState([]);
 
+    const [rates, setRates] = useState();
+
     // Modals State
     const [showDepositModal, setShowDepositModal] = useState(false);
     const [showSmartWalletModal, setShowSmartWallettModal] = useState(false);
@@ -40,6 +44,7 @@ function Wallet({ clientConfig, setClientConfig }) {
     const [showConfirmationModal, setConfirmationModal] = useState(false);
 
     const [tx, setTx] = useState('');
+    console.log({ rates });
 
     function formatNumber(num) {
         if (isNaN(num)) return 0.0;
@@ -61,8 +66,10 @@ function Wallet({ clientConfig, setClientConfig }) {
     }
 
     async function initWalletbalance(contractAddress) {
+        const rates = await getRates();
         const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(contractAddress, clientConfig);
         const { stx: user_stx, fungibleTokens: user_fungibleTokens, nonFungibleTokens: user_nonFungibleTokens } = await getUserBalance(clientConfig);
+        setRates(rates);
         setSmartWalletStx(smartwallet_stx);
         setSmartWalletFungible(smartwallet_fungibleTokens);
         setSmartWalletNoneFungible(smartwallet_nonFungibleTokens);
@@ -119,17 +126,9 @@ function Wallet({ clientConfig, setClientConfig }) {
                 {/* Advisory Box */}
                 <SmartWalletContractAdvisory show={showAdvisory} props={advisoryMessage} icon={<GrDeploy />} action={openLaunchPad} />
 
-                <SmartWalletBalance balance={formatNumber(parseFloat(smartWalletStx?.balance) / 1000000)} stx={smartWalletStx} fungibleToken={smartWalletFungibleToken} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} clientConfig={clientConfig} />
+                <SmartWalletBalance stx={smartWalletStx} sbtc={smartWalletFungibleToken.find(item => item.contract_id === sbtcContractAddress[clientConfig?.chain])} rates={rates} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} clientConfig={clientConfig} />
 
-                {contractState &&
-                    <div className='w-full flex'>
-                        <Tooltip size='sm' content="Click to view on explorer">
-                            <Code size='sm' color="secondary"><a href={`${explorer(smartWalletAddress, '', clientConfig?.chain)}`} target='_blank'>{`${smartWalletAddress.slice(0, 6)}...${smartWalletAddress.slice(-16)}`}</a></Code>
-                        </Tooltip>
-                    </div>
-                }
-
-                <Tabs clientConfig={clientConfig} fungibleToken={smartWalletFungibleToken} nonFungibleToken={smartWalletNonFungibleToken} contractState={contractState} setConfirmationModal={setConfirmationModal} setTx={setTx} smartWalletStx={smartWalletStx} smartWalletAddress={smartWalletAddress} />
+                <Tabs clientConfig={clientConfig} fungibleToken={smartWalletFungibleToken} nonFungibleToken={smartWalletNonFungibleToken} contractState={contractState} setConfirmationModal={setConfirmationModal} setTx={setTx} smartWalletStx={smartWalletStx} smartWalletAddress={smartWalletAddress} rates={rates} />
 
             </div>
 
