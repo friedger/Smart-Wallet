@@ -63,7 +63,6 @@ function Wallet({ clientConfig, setClientConfig }) {
     async function initWalletbalance(contractAddress) {
         const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(contractAddress, clientConfig);
         const { stx: user_stx, fungibleTokens: user_fungibleTokens, nonFungibleTokens: user_nonFungibleTokens } = await getUserBalance(clientConfig);
-        console.log({ contractAddress, smartwallet_stx, smartwallet_fungibleTokens, smartwallet_nonFungibleTokens })
         setSmartWalletStx(smartwallet_stx);
         setSmartWalletFungible(smartwallet_fungibleTokens);
         setSmartWalletNoneFungible(smartwallet_nonFungibleTokens);
@@ -87,9 +86,9 @@ function Wallet({ clientConfig, setClientConfig }) {
                 smartWallet = res?.address;
                 contractStat = res?.found;
             } else {
-                const { found } = await getWalletContractInfo(authedUserAddress, clientConfig);
+                const { found } = await getWalletContractInfo(authedUserContract, clientConfig);
                 if (found) {
-                    smartWallet = authedUserAddress;
+                    smartWallet = authedUserContract;
                     contractStat = found;
                 } else {
                     smartWallet = '';
@@ -120,7 +119,7 @@ function Wallet({ clientConfig, setClientConfig }) {
                 {/* Advisory Box */}
                 <SmartWalletContractAdvisory show={showAdvisory} props={advisoryMessage} icon={<GrDeploy />} action={openLaunchPad} />
 
-                <SmartWalletBalance balance={formatNumber(parseFloat(smartWalletStx?.balance) / 1000000)} stx={smartWalletStx} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} clientConfig={clientConfig} />
+                <SmartWalletBalance balance={formatNumber(parseFloat(smartWalletStx?.balance) / 1000000)} stx={smartWalletStx} fungibleToken={smartWalletFungibleToken} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} clientConfig={clientConfig} />
 
                 {contractState &&
                     <div className='w-full flex'>

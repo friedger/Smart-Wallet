@@ -216,7 +216,7 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
                                 className='uppercase'
                                 startContent={<MdGeneratingTokens color='#FFA500' />}
                                 value={'stx'}
-                                endContent={<Chip color="success" variant="dot">{formatNumber(umicrostoActualValue(stx?.balance, 6))}</Chip>}
+                                endContent={<Chip className='lowercase' color="success" variant="dot">umicro {formatNumber(umicrostoActualValue(stx?.balance, 6))}</Chip>}
                             >
                                 Stx
                             </SelectItem>

@@ -7,7 +7,7 @@ import { isAuthed, userSession } from '../user-session';
 import { IoCopy } from 'react-icons/io5';
 import { FaCopy } from 'react-icons/fa';
 
-function SmartWalletBalance({ balance, stx, setShowDepositModal, setShowStxSendModal, clientConfig }) {
+function SmartWalletBalance({ balance, stx, sbtc, fungibleToken, setShowDepositModal, setShowStxSendModal, clientConfig }) {
     const [address, setAddress] = useState();
 
     useEffect(() => {
@@ -17,7 +17,7 @@ function SmartWalletBalance({ balance, stx, setShowDepositModal, setShowStxSendM
         }
     }, [isAuthed])
 
-    console.log({ address });
+    console.log({ address, balance, fungibleToken });
 
     return (
         <div className='w-full gap-2 flex flex-col md:flex-row items-center mt-3'>

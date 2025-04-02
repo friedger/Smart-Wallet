@@ -77,7 +77,7 @@ const Walletassets = ({ clientConfig, fungibleToken, nonFungibleToken, contractS
             contractAddress: assetAddress,
             contractName: assetContractName,
             functionName: 'transfer',
-            functionArgs: [uintCV(ftTxAmount), principalCV(smartContractAddress), principalCV(address), mem],
+            functionArgs: [uintCV(ftTxAmount), principalCV(smartWalletAddress), principalCV(address), mem],
             network: network(clientConfig?.chain),
             stxAddress: userAddress,
             postConditions: [condition1],
@@ -115,10 +115,11 @@ const Walletassets = ({ clientConfig, fungibleToken, nonFungibleToken, contractS
     }
 
     useEffect(() => {
-        if (amount > umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal)) {
-            setIsFtDisabled(true);
-        } else {
+        const actualAmount = umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal);
+        if ((contractState && actualAmount > amount) && amount > 0) {
             setIsFtDisabled(false);
+        } else {
+            setIsFtDisabled(true);
         }
     }, [selectedToken, amount])
 
@@ -154,7 +155,7 @@ const Walletassets = ({ clientConfig, fungibleToken, nonFungibleToken, contractS
                                             className='uppercase'
                                             value={i}
                                             startContent={<MdGeneratingTokens color='#FFA500' />}
-                                            endContent={<Chip color="success" variant="dot">{formatNumber(umicrostoActualValue(balance, parseInt(decimals) || 1))}</Chip>}>
+                                            endContent={<Chip className='lowercase' color="success" variant="dot">umicro {formatNumber(umicrostoActualValue(balance, parseInt(decimals) || 1))}</Chip>}>
                                             {name}
                                         </SelectItem>
                                     ))}
@@ -165,7 +166,7 @@ const Walletassets = ({ clientConfig, fungibleToken, nonFungibleToken, contractS
                                 <Input label="Address" placeholder='Enter address...' type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
                                 <Input label="Memo" placeholder='Enter memo...' type='text' maxLength={34} value={memo} onChange={(e) => setMemo(e.target.value)} />
 
-                                <Button color='warning' onPress={sendFt} isDisabled={isFtDisabled || !contractState}>
+                                <Button color='warning' onPress={sendFt} isDisabled={isFtDisabled}>
                                     <IoSend size="20px" className='text-white' />
                                 </Button>
                                 <Divider />
