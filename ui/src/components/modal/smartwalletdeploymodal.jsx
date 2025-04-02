@@ -39,10 +39,20 @@ function SmartWalletDeployModal({ clientConfig, show, close, setTx, setConfirmat
             clarityVersion: 2,
             stxAddress: authedUser,
             network: network(clientConfig?.chain),
-            onFinish: (res) => {
+            onFinish: async (res) => {
                 setTx(res?.txId);
-                setConfirmationModal(true);
-                close();
+                const { success, error, code } = await savetoGaia({ fileName: 'config.json', content: { address: `${authedUser}.smart-wallet`, found, chain: clientConfig?.chain } });
+                if (success) {
+                    setConfirmationModal(true);
+                    close();
+                } else {
+                    setErrorMsg({
+                        title: code,
+                        msg: error,
+                        color: 'warning',
+                        state: true
+                    });
+                }
             },
             onCancel: (res) => {
                 console.log('transaction cancelled', { res });
@@ -64,7 +74,7 @@ function SmartWalletDeployModal({ clientConfig, show, close, setTx, setConfirmat
             return;
         }
 
-        const { success, error, code } = await savetoGaia({ fileName: 'config.json', content: { address: overrideContractAddress, found } });
+        const { success, error, code } = await savetoGaia({ fileName: 'config.json', content: { address: overrideContractAddress, found, chain: clientConfig?.chain } });
         if (success) {
             window.location.reload();
         } else {
