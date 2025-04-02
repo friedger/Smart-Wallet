@@ -103,6 +103,7 @@ function Wallet({ clientConfig, setClientConfig }) {
     }
 
     useEffect(() => {
+        // Init Wallet
         initWalletInstance();
     }, [])
 
