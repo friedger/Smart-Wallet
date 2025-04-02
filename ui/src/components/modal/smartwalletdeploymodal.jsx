@@ -41,7 +41,7 @@ function SmartWalletDeployModal({ clientConfig, show, close, setTx, setConfirmat
             network: network(clientConfig?.chain),
             onFinish: async (res) => {
                 setTx(res?.txId);
-                const { success, error, code } = await savetoGaia({ fileName: 'config.json', content: { address: `${authedUser}.smart-wallet`, found, chain: clientConfig?.chain } });
+                const { success, error, code } = await savetoGaia({ fileName: 'config.json', content: { address: `${authedUser}.smart-wallet`, found: true, chain: clientConfig?.chain } });
                 if (success) {
                     setConfirmationModal(true);
                     close();
