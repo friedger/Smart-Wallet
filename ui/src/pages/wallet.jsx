@@ -16,6 +16,7 @@ import { Code, Tooltip } from '@heroui/react';
 
 function Wallet({ clientConfig, setClientConfig }) {
     const { address } = useParams();
+    const authedUserAddress = userSession.loadUserData().profile.stxAddress[clientConfig.network];
     const authedUserContract = `${userSession.loadUserData().profile.stxAddress[clientConfig.network]}.smart-wallet`;
 
     const [smartWalletAddress, setSmartWalletAddress] = useState();
@@ -40,8 +41,6 @@ function Wallet({ clientConfig, setClientConfig }) {
 
     const [tx, setTx] = useState('');
 
-    console.log({ smartWalletAddress, address: Boolean(address), authedUserContract });
-
     function formatNumber(num) {
         if (isNaN(num)) return 0.0;
 
@@ -64,7 +63,7 @@ function Wallet({ clientConfig, setClientConfig }) {
     async function initWalletbalance(contractAddress) {
         const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(contractAddress, clientConfig);
         const { stx: user_stx, fungibleTokens: user_fungibleTokens, nonFungibleTokens: user_nonFungibleTokens } = await getUserBalance(clientConfig);
-
+        console.log({ contractAddress, smartwallet_stx, smartwallet_fungibleTokens, smartwallet_nonFungibleTokens })
         setSmartWalletStx(smartwallet_stx);
         setSmartWalletFungible(smartwallet_fungibleTokens);
         setSmartWalletNoneFungible(smartwallet_nonFungibleTokens);
@@ -85,12 +84,18 @@ function Wallet({ clientConfig, setClientConfig }) {
                 contractStat = found;
             }
         } else {
-            if (res?.chain === clientConfig?.chain) {
+            if (res?.found && res?.chain === clientConfig?.chain) {
                 smartWallet = res?.address;
                 contractStat = res?.found;
             } else {
-                smartWallet = '';
-                contractStat = false;
+                const { found } = await getWalletContractInfo(authedUserAddress, clientConfig);
+                if (found) {
+                    smartWallet = authedUserAddress;
+                    contractStat = found;
+                } else {
+                    smartWallet = '';
+                    contractStat = false;
+                }
             }
         }
         console.log({ smartWallet, contractStat });

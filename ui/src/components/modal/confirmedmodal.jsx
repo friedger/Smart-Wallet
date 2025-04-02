@@ -10,7 +10,7 @@ const ConfirmedModal = ({ show, close, tx, clientConfig }) => {
                 <Alert
                     color="success"
                     className='flex items-center text-justify'
-                    description={`The transaction has been successfully confirmed with the following TX: ${`${tx.slice(0, 5)}...${tx.length - 5, tx.length}`}. For details regarding the transaction. 🚀🔗`}
+                    description={`The transaction has been successfully broadcasted, with the following TX: ${`${tx.slice(0, 5)}...${tx.length - 5, tx.length}`}. For more details regarding the transaction. 🚀🔗`}
                     title="Note:"
                     variant="faded"
                 />

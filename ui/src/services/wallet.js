@@ -61,6 +61,7 @@ export async function getConfig() {
     if (success) {
         result = fileContent;
     }
+    console.log('Look here', { result });
     return result;
 }
 

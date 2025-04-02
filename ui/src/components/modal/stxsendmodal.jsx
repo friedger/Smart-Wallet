@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import BaseModal from './basemodal';
 import { Alert, Button, Chip, Code, Input, ModalBody, ModalHeader } from '@heroui/react';
 import { RiLuggageDepositFill } from 'react-icons/ri';
-import { openSTXTransfer } from '@stacks/connect';
-import { Pc, PostConditionMode } from '@stacks/transactions';
+import { openContractCall, openSTXTransfer } from '@stacks/connect';
+import { bufferCVFromString, noneCV, optionalCVOf, Pc, PostConditionMode, principalCV, uintCV } from '@stacks/transactions';
 import { userSession } from '../../user-session';
 import { network } from '../../lib/constants';
 
-const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWalletAddress }) => {
+const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWalletAddress, setTx, setConfirmationModal }) => {
     const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
 
     const [amount, setAmount] = useState(0);
@@ -18,15 +18,21 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
     function sendStx() {
         const txAmount = amount * 1000000;
         const postConditions = [Pc.principal(smartWalletAddress).willSendLte(txAmount).ustx()];
-
-        openSTXTransfer({
-            recipient: address,
-            amount: txAmount,
-            memo,
-            network: network(clientConfig?.chain),
+        const mem = memo ? optionalCVOf(bufferCVFromString(memo)) : noneCV();
+        openContractCall({
+            contractAddress: smartWalletAddress?.split('.')[0],
+            contractName: smartWalletAddress?.split('.')[1],
+            functionName: 'stx-transfer',
+            functionArgs: [uintCV(txAmount), principalCV(address), mem],
+            stxAddress: userAddress,
             postConditions,
             postConditionMode: PostConditionMode.Deny,
-            stxAddress: userAddress
+            network: network(clientConfig?.chain),
+            onFinish: ({ txId }) => {
+                setTx(txId);
+                setConfirmationModal(true);
+                close();
+            }
         })
     }
 
