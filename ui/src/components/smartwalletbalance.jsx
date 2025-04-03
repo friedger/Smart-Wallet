@@ -49,7 +49,7 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
                         </PopoverContent>
                     </Popover>
                     <div className='flex flex-col gap-1'>
-                        <label><Code className='text-warning'>{umicrostoActualValue(stx?.balance, 8) || 0} <Chip size='sm' variant='dot' color='success'>${((umicrostoActualValue(stx?.balance, 8) || 0) * (Number(rates?.['STXUSDT']?.price) || 0)).toFixed(2)}</Chip></Code></label>
+                        <label><Code className='text-warning'>{umicrostoActualValue(stx?.balance, 6) || 0} <Chip size='sm' variant='dot' color='success'>${((umicrostoActualValue(stx?.balance, 6) || 0) * (Number(rates?.['STXUSDT']?.price) || 0)).toFixed(2)}</Chip></Code></label>
                         <h3 className='text-small tracking-tight text-default-500'>rate: <small className='text-primary'>${(Number(rates?.['STXUSDT']?.price) || 0).toFixed(2)}</small></h3>
                     </div>
                 </div>
