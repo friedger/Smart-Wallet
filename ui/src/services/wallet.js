@@ -59,7 +59,6 @@ export async function getConfig() {
     if (success) {
         result = fileContent;
     }
-    console.log('Look here', { result });
     return result;
 }
 
@@ -71,7 +70,6 @@ export async function getWalletContractInfo(address, clientConfig) {
         const response = (await axios.get(`${clientConfig?.api}/extended/v2/smart-contracts/status?contract_id=${address}`)).data;
         const contractInfo = response[address];
         result = { found: contractInfo?.found && contractInfo?.result?.status === 'success', ...contractInfo?.result, address };
-        console.log({ response, contractInfo, result });
 
     } catch (error) {
 

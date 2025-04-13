@@ -25,6 +25,8 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
         }
     }, [isAuthed])
 
+    console.log({ rates });
+
     return (
         <div className='w-full flex-1 flex items-center justify-center md:justify-start gap-4'>
             <div className='flex flex-col'>
@@ -49,8 +51,8 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
                         </PopoverContent>
                     </Popover>
                     <div className='flex flex-col gap-1'>
-                        <label><Code className='text-warning'>{umicrostoActualValue(stx?.balance, 6) || 0} <Chip size='sm' variant='dot' color='success'>${((umicrostoActualValue(stx?.balance, 6) || 0) * (Number(rates?.['STXUSDT']?.price) || 0)).toFixed(2)}</Chip></Code></label>
-                        <h3 className='text-small tracking-tight text-default-500'>rate: <small className='text-primary'>${(Number(rates?.['STXUSDT']?.price) || 0).toFixed(2)}</small></h3>
+                        <label><Code className='text-warning'>{umicrostoActualValue(stx?.balance, 6) || 0} <Chip size='sm' variant='dot' color='success'>${((umicrostoActualValue(stx?.balance, 6) || 0) * (Number(rates?.['stx']?.current_price) || 0)).toFixed(2)}</Chip></Code></label>
+                        <h3 className='text-small tracking-tight text-default-500'>rate: <small className='text-primary'>${(Number(rates?.['stx']?.current_price) || 0).toLocaleString()}</small></h3>
                     </div>
                 </div>
 
@@ -75,8 +77,8 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
                         </PopoverContent>
                     </Popover>
                     <div className='flex flex-col gap-1'>
-                        <label><Code className='text-warning'>{umicrostoActualValue(sbtc?.balance, 8) || 0} <Chip size='sm' variant='dot' color='success'>${((umicrostoActualValue(sbtc?.balance, 8) || 0) * (Number(rates?.['BTCUSDT']?.price) || 0)).toFixed(2)}</Chip></Code></label>
-                        <h3 className='text-small tracking-tight text-default-500'>rate: <small className='text-primary'>${(Number(rates?.['BTCUSDT']?.price) || 0).toFixed(2)}</small></h3>
+                        <label><Code className='text-warning'>{umicrostoActualValue(sbtc?.balance, 8) || 0} <Chip size='sm' variant='dot' color='success'>${((umicrostoActualValue(sbtc?.balance, 8) || 0) * (Number(rates?.['btc']?.current_price) || 0)).toFixed(2)}</Chip></Code></label>
+                        <h3 className='text-small tracking-tight text-default-500'>rate: <small className='text-primary'>${(Number(rates?.['btc']?.current_price) || 0).toLocaleString()}</small></h3>
                     </div>
                 </div>
             </div>
