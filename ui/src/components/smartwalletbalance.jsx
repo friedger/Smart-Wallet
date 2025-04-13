@@ -25,8 +25,6 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
         }
     }, [isAuthed])
 
-    console.log({ rates });
-
     return (
         <div className='w-full flex-1 flex items-center justify-center md:justify-start gap-4'>
             <div className='flex flex-col'>

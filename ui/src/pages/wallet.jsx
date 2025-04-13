@@ -44,7 +44,6 @@ function Wallet({ clientConfig, setClientConfig }) {
     const [showConfirmationModal, setConfirmationModal] = useState(false);
 
     const [tx, setTx] = useState('');
-    console.log({ rates });
 
     function formatNumber(num) {
         if (isNaN(num)) return 0.0;
@@ -69,6 +68,7 @@ function Wallet({ clientConfig, setClientConfig }) {
         const rates = await getRates();
         const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(contractAddress, clientConfig);
         const { stx: user_stx, fungibleTokens: user_fungibleTokens, nonFungibleTokens: user_nonFungibleTokens } = await getUserBalance(clientConfig);
+
         setRates(rates);
         setSmartWalletStx(smartwallet_stx);
         setSmartWalletFungible(smartwallet_fungibleTokens);
@@ -103,7 +103,7 @@ function Wallet({ clientConfig, setClientConfig }) {
                 }
             }
         }
-        console.log({ smartWallet, contractStat });
+
         setSmartWalletAddress(smartWallet);
         setContractState(contractStat);
         setAdvisoryMessage({ msg: 'Seems you dont have smart wallet contract deployed yet.', reason: 'Deploy Required', severity: 'secondary' });
