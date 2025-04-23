@@ -72,8 +72,8 @@ const DelegateStxPox4 = ({ clientConfig, contractState, setConfirmationModal, se
 
                 </>
                 : <>
-
-                    <Button isDisabled={!smartWalletAddress} color='warning'
+                    {console.log({ f: !(smartWalletAddress && (smartWalletOriginAddress === userAddress)) })}
+                    <Button isDisabled={!(smartWalletAddress && (smartWalletOriginAddress === userAddress))} color='warning'
                         onPress={() => deployContract({
                             codePath: '/ext-delegate-stx-pox-4.clar',
                             contractName: 'ext-delegate-stx-pox-4',
