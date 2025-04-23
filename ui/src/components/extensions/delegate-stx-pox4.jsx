@@ -18,8 +18,10 @@ const DelegateStxPox4 = ({ clientConfig, contractState, setConfirmationModal, se
     const [delegateContract, setDelegateContract] = useState(false);
     const [errorMsg, setErrorMsg] = useState({ title: '', msg: '', color: '', state: false });
 
+
     const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
-    const delegationContract = `${userAddress}.ext-delegate-stx-pox-4`;
+    const [smartWalletOriginAddress, smartWalletName] = smartWalletAddress.split('.');
+    const delegationContract = `${smartWalletOriginAddress}.ext-delegate-stx-pox-4`;
 
     function hexToUint8Array(hexString) {
         if (hexString.startsWith('0x')) {
