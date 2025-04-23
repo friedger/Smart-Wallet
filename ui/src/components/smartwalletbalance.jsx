@@ -8,7 +8,7 @@ import { IoCopy } from 'react-icons/io5';
 import { FaCopy } from 'react-icons/fa';
 import { umicrostoActualValue } from '../lib/operator';
 
-function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxSendModal, clientConfig }) {
+function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxSendModal, smartWalletAddress, clientConfig }) {
     const [address, setAddress] = useState();
     const [copied, setCopied] = useState(false);
 
@@ -29,7 +29,7 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
         <div className='w-full flex-1 flex items-center justify-center md:justify-start gap-4'>
             <div className='flex flex-col'>
                 <div className='flex gap-3 items-center'>
-                    <Popover placement="top">
+                    <Popover placement="top" isTriggerDisabled={!Boolean(smartWalletAddress)}>
                         <PopoverTrigger>
                             <Avatar
                                 isBordered
@@ -55,7 +55,7 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
                 </div>
 
                 <div className='flex gap-3 items-center'>
-                    <Popover placement="top">
+                    <Popover placement="top" isTriggerDisabled={!Boolean(smartWalletAddress)}>
                         <PopoverTrigger>
                             <Avatar
                                 isBordered

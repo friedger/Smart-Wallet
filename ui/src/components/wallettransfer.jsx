@@ -30,10 +30,14 @@ const Wallettransfer = ({ clientConfig, contractState, setConfirmationModal, set
     return (
         <div className='w-full flex flex-col gap-5 items-center p-5'>
 
-            <div className='w-full flex gap-5 flex-col'>
-                <Input label='Address' placeholder='Enter address' value={address} onChange={(e) => setAdress(e.target.value)} />
-                <Button isDisabled={!(address && contractState)} color='warning' onPress={transferWalletOwnerShip}>Transfer Wallet</Button>
-            </div>
+            <form className='w-full flex gap-5 flex-col' onSubmit={(e) => {
+                e.preventDefault();
+                transferWalletOwnerShip();
+            }} >
+
+                <Input label='Address' name='transfer-to-address' autoComplete="on" placeholder='Enter address' value={address} onChange={(e) => setAdress(e.target.value)} />
+                <Button isDisabled={!(address && contractState)} color='warning' type='submit'>Transfer Wallet</Button>
+            </form>
 
         </div>
     );

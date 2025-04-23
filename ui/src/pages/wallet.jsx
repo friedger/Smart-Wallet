@@ -81,6 +81,7 @@ function Wallet({ clientConfig, setClientConfig }) {
 
     async function initWalletInstance() {
         let smartWallet, contractStat;
+        console.log({ address });
         if (Boolean(address)) {
             const { found } = await getWalletContractInfo(address, clientConfig);
             if (found) {
@@ -116,6 +117,10 @@ function Wallet({ clientConfig, setClientConfig }) {
         // Init Wallet
         initWalletInstance();
     }, [])
+
+    useEffect(() => {
+        console.log({ smartWalletAddress });
+    }, [smartWalletAddress])
 
     return (
         <>

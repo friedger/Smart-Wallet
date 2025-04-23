@@ -155,7 +155,7 @@ const Walletassets = ({ clientConfig, fungibleToken, nonFungibleToken, contractS
                                             className='uppercase'
                                             value={i}
                                             startContent={<MdGeneratingTokens color='#FFA500' />}
-                                            endContent={<Chip className='lowercase' color="success" variant="dot">umicro {formatNumber(umicrostoActualValue(balance, parseInt(decimals) || 1))}</Chip>}>
+                                            endContent={<Chip className='lowercase' color="success" variant="dot">umicro {umicrostoActualValue(balance, parseInt(decimals) || 1).toLocaleString()}</Chip>}>
                                             {name}
                                         </SelectItem>
                                     ))}
@@ -163,7 +163,7 @@ const Walletassets = ({ clientConfig, fungibleToken, nonFungibleToken, contractS
                                 </Select>
 
                                 <Input label="Amount" placeholder='Enter amount...' type='number' max={umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal) || 0} onChange={(e) => setAmount(e.target.value)} />
-                                <Input label="Address" placeholder='Enter address...' type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
+                                <Input label="Address" name='address' autoComplete="on" placeholder='Enter address...' type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
                                 <Input label="Memo" placeholder='Enter memo...' type='text' maxLength={34} value={memo} onChange={(e) => setMemo(e.target.value)} />
 
                                 <Button color='warning' onPress={sendFt} isDisabled={isFtDisabled}>

@@ -1,19 +1,25 @@
-import { Button, Input } from '@heroui/react';
+import { Alert, Button, Input } from '@heroui/react';
 import { openContractCall } from '@stacks/connect';
 import React, { useEffect, useState } from 'react';
 import { PiLockKey } from "react-icons/pi";
 import { network } from '../../lib/constants';
 import { bufferCV, bufferCVFromString, deserializeCV, noneCV, Pc, PostConditionMode, principalCV, serializeCV, stringAsciiCV, tupleCV, uintCV } from '@stacks/transactions';
-import { delegate_address } from '../../lib/contracts';
 import { userSession } from '../../user-session';
 import { bufferFromAscii, serialize, stringAscii } from '@stacks/transactions/dist/cl';
+import { getWalletContractInfo, deployContract, delegate } from '../../services/wallet';
 
 const DelegateStxPox4 = ({ clientConfig, contractState, setConfirmationModal, setTx, smartWalletStx, smartWalletAddress }) => {
     const [amount, setAmount] = useState(0.1);
     const [address, setAddress] = useState(smartWalletAddress);
     const [lockPeriod, setLockPeriod] = useState(1);
 
+    const [loading, setLoading] = useState(true);
+
+    const [delegateContract, setDelegateContract] = useState(false);
+    const [errorMsg, setErrorMsg] = useState({ title: '', msg: '', color: '', state: false });
+
     const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
+    const delegationContract = `${userAddress}.ext-delegate-stx-pox-4`;
 
     function hexToUint8Array(hexString) {
         if (hexString.startsWith('0x')) {
@@ -26,54 +32,63 @@ const DelegateStxPox4 = ({ clientConfig, contractState, setConfirmationModal, se
         return bytes;
     }
 
-    function delegate() {
-        const delegateAmount = amount * 1000000;
-        const serializedPayload = hexToUint8Array(serializeCV(
-            tupleCV({
-                "action": stringAsciiCV('delegate'),
-                "amount-ustx": uintCV(delegateAmount),
-                "delegate-to": principalCV(address),
-                "until-burn-ht": noneCV(),
-                "pox-addr": noneCV(),
-            })
-        ));
-
-        const [contractAddress, contractName] = smartWalletAddress.split('.');
-        openContractCall({
-            contractAddress: contractAddress,
-            contractName: contractName,
-            functionName: 'extension-call',
-            functionArgs: [
-                principalCV(delegate_address),
-                bufferCV(serializedPayload)
-            ],
-            network: network(clientConfig?.chain),
-            stxAddress: userAddress,
-            postConditionMode: PostConditionMode.Deny,
-            postConditions: [
-                Pc.principal(smartWalletAddress).willSendLte(delegateAmount).ustx()
-            ],
-            onFinish: ({ txId }) => {
-                setTx(txId);
-                setConfirmationModal(true);
-            },
-            onCancel: () => {
-                console.log('Action canceled!!!');
-            }
-        })
+    async function init() {
+        const { found } = await getWalletContractInfo(delegationContract, clientConfig);
+        setDelegateContract(found);
+        setLoading(false);
     }
+
+    useEffect(() => {
+        init();
+    }, [smartWalletAddress])
 
     return (
         <div className='w-full flex flex-col space-y-4'>
-            <Input label='Lock Amount' errorMessage={amount < 1 ? `Minimum lock-amount is 1!!!` : amount > smartWalletStx?.balance ? "Insufficient funds!!!" : ""} min={1} name="lock-amount" type='number' value={amount} onChange={(e) => setAmount(e.target.value)} />
 
-            <Input label='Delegate to Address' id='delegate-to-address' type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
+            {(delegateContract && !loading)
+                ? <>
 
-            <Input errorMessage={lockPeriod < 1 ? `Minimum lock-period is 1!!!` : lockPeriod > 12 ? "Max lock period is 12!!" : ""} label='Lock Period' name='lock-period' type='text' min={1} max={12} value={lockPeriod} onChange={(e) => setLockPeriod(e.target.value)} />
+                    <Input label='Lock Amount' errorMessage={amount < 1 ? `Minimum lock-amount is 1!!!` : amount > smartWalletStx?.balance ? "Insufficient funds!!!" : ""} min={1} name="lock-amount" type='number' value={amount} onChange={(e) => setAmount(e.target.value)} />
 
-            <Button isDisabled={!contractState} color='warning' onPress={delegate}>
-                <PiLockKey size="20px" className='text-white' />
-            </Button>
+                    <Input label='Delegate to Address' name='delegate-to-address' autoComplete="on" id='delegate-to-address' type='text' value={address} onChange={(e) => setAddress(e.target.value)} />
+
+                    <Input errorMessage={lockPeriod < 1 ? `Minimum lock-period is 1!!!` : lockPeriod > 12 ? "Max lock period is 12!!" : ""} label='Lock Period' name='lock-period' type='text' min={1} max={12} value={lockPeriod} onChange={(e) => setLockPeriod(e.target.value)} />
+
+                    <Button isDisabled={!contractState} color='warning'
+                        onPress={() => delegate({
+                            authAddress: userAddress,
+                            amount,
+                            delegate_to_address: address,
+                            smartWalletAddress,
+                            delegationContract,
+                            setTx,
+                            setConfirmationModal,
+                            clientConfig
+                        })}>
+                        <PiLockKey size="20px" className='text-white' />
+                    </Button>
+
+                </>
+                : <>
+
+                    <Button isDisabled={!smartWalletAddress} color='warning'
+                        onPress={() => deployContract({
+                            codePath: '/ext-delegate-stx-pox-4.clar',
+                            contractName: 'ext-delegate-stx-pox-4',
+                            authedUser: userAddress,
+                            setTx,
+                            setConfirmationModal,
+                            setErrorMsg,
+                            clientConfig
+                        })} className='flex items-center justify-center space-x-2 font-bold text-white'>
+                        Deploy
+                    </Button>
+
+                    {errorMsg.state && <Alert className="flex justify-center items-center" title={errorMsg.title} color={errorMsg.color} description={errorMsg.msg} closeButton={true} />}
+
+                </>
+            }
+
         </div>
     );
 }
