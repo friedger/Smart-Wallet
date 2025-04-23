@@ -30,13 +30,13 @@
         (if (is-eq "delegate" (get action details))
             (begin
                 (try! (stx-transfer? (get amount-ustx details) tx-sender (as-contract tx-sender)))
-                (try! (as-uint-response (as-contract (contract-call? 'SP000000000000000000002Q6VF78.pox-4 delegate-stx
+                (try! (as-uint-response (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 delegate-stx
                     (get amount-ustx details) (get delegate-to details) (get until-burn-ht details) (get pox-addr details)))))
                 (ok true)
             )
             (if (is-eq "revoke" (get action details))
                 (begin
-                    (try! (match (as-contract (contract-call? 'SP000000000000000000002Q6VF78.pox-4 revoke-delegate-stx))
+                    (try! (match (as-contract (contract-call? 'ST000000000000000000002AMW42H.pox-4 revoke-delegate-stx))
                         success (ok success)
                         error (err (to-uint error))
                     ))
