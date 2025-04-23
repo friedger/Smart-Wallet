@@ -29,7 +29,7 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
         <div className='w-full flex-1 flex items-center justify-center md:justify-start gap-4'>
             <div className='flex flex-col'>
                 <div className='flex gap-3 items-center'>
-                    <Popover placement="top" isTriggerDisabled={!Boolean(smartWalletAddress)}>
+                    <Popover placement="top" isTriggerDisabled={!smartWalletAddress}>
                         <PopoverTrigger>
                             <Avatar
                                 isBordered
@@ -82,10 +82,10 @@ function SmartWalletBalance({ stx, sbtc, rates, setShowDepositModal, setShowStxS
             </div>
 
             <div className='flex flex-col gap-4 justify-end'>
-                <Button color="warning" radius="full" size="sm" onPress={() => setShowDepositModal(true)}>
+                <Button isDisabled={!smartWalletAddress} color="warning" radius="full" size="sm" onPress={() => setShowDepositModal(true)}>
                     <RiLuggageDepositFill color='white' />
                 </Button>
-                <Button color="warning" radius="full" size="sm" onPress={() => setShowStxSendModal(true)}>
+                <Button isDisabled={!smartWalletAddress} color="warning" radius="full" size="sm" onPress={() => setShowStxSendModal(true)}>
                     <IoMdSend color='white' />
                 </Button>
             </div>
