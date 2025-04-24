@@ -24,6 +24,7 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
     const [amount, setAmount] = useState(0);
     const [memo, setMemo] = useState('');
 
+    console.log({ smartWalletAddress, contractState });
 
     function formatNumber(num) {
         if (isNaN(num)) return 0.0;
@@ -68,10 +69,12 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
 
     async function depositFt() {
         const { name, contract_id } = selectedToken;
+        console.log({ name, contract_id, selectedToken, smartWalletAddress });
         if (name === 'stx') {
+            console.log('Stx Transfer');
             const stxTxAmount = actualtoUmicroValue(amount, selectedToken?.decimal);
             const condition0 = Pc.principal(userAddress).willSendLte(stxTxAmount).ustx();
-            openSTXTransfer({
+            const txOption = {
                 amount: stxTxAmount,
                 recipient: smartWalletAddress,
                 memo: memo,
@@ -87,7 +90,9 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
                 onCancel: (res) => {
                     console.log('transaction cancelled', { res });
                 }
-            })
+            }
+            console.log({ txOption });
+            openSTXTransfer(txOption);
             return;
         }
 
@@ -139,12 +144,13 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
     }
 
     useEffect(() => {
-        if (amount > umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal)) {
-            setIsDisabled(true);
-        } else {
+        const actualBalance = umicrostoActualValue(selectedToken?.balance || 0, selectedToken?.decimal || 0);
+        if (contractState && actualBalance > amount && amount > 0) {
             setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
         }
-    }, [selectedToken, amount])
+    }, [selectedToken, amount, smartWalletAddress])
 
     return (
         <BaseModal baseModalsOpen={show} baseModalOnClose={close}>
@@ -210,8 +216,7 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
                                 className='uppercase'
                                 startContent={<MdGeneratingTokens color='#FFA500' />}
                                 value={'stx'}
-                                endContent={<Chip color="success" variant="dot">{formatNumber(umicrostoActualValue(stx?.balance, 6))}</Chip>}
-                                isReadOnly={isDisabled}
+                                endContent={<Chip className='lowercase' color="success" variant="dot">umicro {umicrostoActualValue(stx?.balance, 1).toLocaleString()}</Chip>}
                             >
                                 Stx
                             </SelectItem>
@@ -221,20 +226,19 @@ const DepositModal = ({ clientConfig, show, close, stx, fungibleToken, nonFungib
                                     className='uppercase'
                                     value={i}
                                     startContent={<MdGeneratingTokens color='#FFA500' />}
-                                    endContent={<Chip color="success" variant="dot">{formatNumber(umicrostoActualValue(balance, parseInt(decimals) || 1))}</Chip>}
-                                    isReadOnly={isDisabled}>
+                                    endContent={<Chip className="lowercase" color="success" variant="dot">umicro {umicrostoActualValue(balance, parseInt(decimals) || 1).toLocaleString()}</Chip>}                                    >
                                     {name}
                                 </SelectItem>
                             ))}
 
                         </Select>
-                        <Input errorMessage={`Value must be less than or equal to ${formatNumber(umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal))}`} label="Amount" placeholder="Enter amount" type="number" max={umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal) || 0} value={amount} onChange={(e) => setAmount(e.target.value)} />
+                        <Input errorMessage={umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal) < amount ? `Insufficient balance, current balance ${umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal)}` : ''} label="Amount" placeholder="Enter amount" type="number" max={umicrostoActualValue(selectedToken?.balance, selectedToken?.decimal) || 0} value={amount} onChange={(e) => setAmount(e.target.value)} />
                         <Input label="Memo" placeholder="Enter memo" type="text" maxLength={34} value={memo} onChange={(e) => setMemo(e.target.value)} />
 
                     </>
                 }
 
-                <Button color="warning" variant="shadow" onPress={assetSwitch ? depositNft : depositFt} isDisabled={isDisabled || !contractState}>
+                <Button color="warning" variant="shadow" onPress={assetSwitch ? depositNft : depositFt} isDisabled={isDisabled}>
                     <RiLuggageDepositFill color='white' />
                 </Button>
 

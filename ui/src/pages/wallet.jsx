@@ -4,19 +4,24 @@ import SmartWalletContractAdvisory from '../components/alert/smartWalletContract
 import { GrDeploy } from 'react-icons/gr';
 import SmartWalletBalance from '../components/smartwalletbalance';
 import Tabs from '../components/tabs';
-import { getSmartWalletBalance, getUserBalance, getWalletContractInfo } from '../services/wallet';
+import { getConfig, getSmartWalletBalance, getUserBalance, getWalletContractInfo } from '../services/wallet';
 import DepositModal from '../components/modal/depositModal';
 import SmartWalletDeployModal from '../components/modal/smartwalletdeploymodal';
 import StxSendModal from '../components/modal/stxsendmodal';
 import ConfirmedModal from '../components/modal/confirmedmodal';
 import { useParams } from 'react-router-dom';
 import { userSession } from '../user-session';
-import { explorer } from '../lib/constants';
+import { explorer, sbtcContractAddress } from '../lib/constants';
 import { Code, Tooltip } from '@heroui/react';
+import axios from 'axios';
+import { getRates } from '../services/rates';
 
 function Wallet({ clientConfig, setClientConfig }) {
     const { address } = useParams();
-    const [smartWalletAddress, setSmartWalletAddress] = useState(address || userSession.loadUserData().profile.stxAddress[clientConfig.network] + '.smart-wallet');
+    const authedUserAddress = userSession.loadUserData().profile.stxAddress[clientConfig.network];
+    const authedUserContract = `${userSession.loadUserData().profile.stxAddress[clientConfig.network]}.smart-wallet`;
+
+    const [smartWalletAddress, setSmartWalletAddress] = useState();
 
     const [showAdvisory, setShowAdvisory] = useState(false);
     const [advisoryMessage, setAdvisoryMessage] = useState({ title: '', msg: '', reason: '', severity: '' });
@@ -29,6 +34,8 @@ function Wallet({ clientConfig, setClientConfig }) {
     const [smartWalletStx, setSmartWalletStx] = useState({});
     const [smartWalletFungibleToken, setSmartWalletFungible] = useState([]);
     const [smartWalletNonFungibleToken, setSmartWalletNoneFungible] = useState([]);
+
+    const [rates, setRates] = useState();
 
     // Modals State
     const [showDepositModal, setShowDepositModal] = useState(false);
@@ -57,12 +64,12 @@ function Wallet({ clientConfig, setClientConfig }) {
         setShowSmartWallettModal(true);
     }
 
-    async function initWalletbalance() {
-        const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(smartWalletAddress, clientConfig);
+    async function initWalletbalance(contractAddress) {
+        const rates = await getRates();
+        const { stx: smartwallet_stx, fungibleTokens: smartwallet_fungibleTokens, nonFungibleTokens: smartwallet_nonFungibleTokens } = await getSmartWalletBalance(contractAddress, clientConfig);
         const { stx: user_stx, fungibleTokens: user_fungibleTokens, nonFungibleTokens: user_nonFungibleTokens } = await getUserBalance(clientConfig);
 
-        console.log({ smartwallet_stx, smartwallet_fungibleTokens, smartwallet_nonFungibleTokens, user_stx, user_fungibleTokens, user_nonFungibleTokens });
-
+        setRates(rates);
         setSmartWalletStx(smartwallet_stx);
         setSmartWalletFungible(smartwallet_fungibleTokens);
         setSmartWalletNoneFungible(smartwallet_nonFungibleTokens);
@@ -71,49 +78,69 @@ function Wallet({ clientConfig, setClientConfig }) {
         setUserFungible(user_fungibleTokens);
         setUserNoneFungible(user_nonFungibleTokens);
     }
+
     async function initWalletInstance() {
-        const contract_info = await getWalletContractInfo(smartWalletAddress, clientConfig);
-        setShowAdvisory(!contract_info?.found);
-        setContractState(contract_info?.found);
-        if (!contract_info?.found) {
-            setAdvisoryMessage({ msg: 'Seems you dont have smart wallet contract deployed yet.', reason: 'Deploy Required', severity: 'secondary' });
-            setShowSmartWallettModal(true);
-        };
-        if (contract_info?.error) { setAdvisoryMessage({ msg: contract_info?.error, reason: contract_info?.code, severity: 'danger' }); };
+        let smartWallet, contractStat;
+        console.log({ address });
+        if (Boolean(address)) {
+            const { found } = await getWalletContractInfo(address, clientConfig);
+            if (found) {
+                smartWallet = address;
+                contractStat = found;
+            }
+        } else {
+            const res = await getConfig();
+            if (res?.found && res?.chain === clientConfig?.chain) {
+                smartWallet = res?.address;
+                contractStat = res?.found;
+            } else {
+                const { found } = await getWalletContractInfo(authedUserContract, clientConfig);
+                if (found) {
+                    smartWallet = authedUserContract;
+                    contractStat = found;
+                } else {
+                    smartWallet = '';
+                    contractStat = false;
+                }
+            }
+        }
+
+        setSmartWalletAddress(smartWallet);
+        setContractState(contractStat);
+        setAdvisoryMessage({ msg: 'Seems you dont have smart wallet contract deployed yet.', reason: 'Deploy Required', severity: 'secondary' });
+        setShowAdvisory(!contractStat);
+        setShowSmartWallettModal(!contractStat);
+        initWalletbalance(smartWallet);
     }
 
     useEffect(() => {
-        initWalletbalance();
+        // Init Wallet
         initWalletInstance();
     }, [])
 
+    useEffect(() => {
+        console.log({ smartWalletAddress });
+    }, [smartWalletAddress])
+
     return (
         <>
-            <div className="w-full flex flex-col justify-center gap-6 items-center mt-10 p-2 sm:p-[5%] md:p-[10%] lg:p-[10%]">
+            <div className="w-full flex flex-col justify-center gap-2 items-center mt-10 p-2 sm:p-[5%] md:p-[10%] lg:p-[10%]">
 
                 <Header clientConfig={clientConfig} setClientConfig={setClientConfig} />
 
                 {/* Advisory Box */}
                 <SmartWalletContractAdvisory show={showAdvisory} props={advisoryMessage} icon={<GrDeploy />} action={openLaunchPad} />
 
-                {contractState &&
-                    <div className='w-full flex'>
-                        <Tooltip size='sm' content="Click to view on explorer">
-                            <Code size='sm' color="secondary"><a href={`${explorer(smartWalletAddress, '', clientConfig?.chain)}`} target='_blank'>{`${smartWalletAddress.slice(0, 6)}...${smartWalletAddress.slice(-16)}`}</a></Code>
-                        </Tooltip>
-                    </div>
-                }
+                <SmartWalletBalance stx={smartWalletStx} sbtc={smartWalletFungibleToken.find(item => item.contract_id === sbtcContractAddress[clientConfig?.chain])} rates={rates} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} clientConfig={clientConfig} />
 
-                <SmartWalletBalance balance={formatNumber(parseFloat(smartWalletStx?.balance) / 1000000)} stx={smartWalletStx} setShowDepositModal={setShowDepositModal} setShowStxSendModal={setShowStxSendModal} smartWalletAddress={smartWalletAddress} />
-
-                <Tabs clientConfig={clientConfig} fungibleToken={smartWalletFungibleToken} nonFungibleToken={smartWalletNonFungibleToken} contractState={contractState} setConfirmationModal={setConfirmationModal} setTx={setTx} smartWalletStx={smartWalletStx} smartWalletAddress={smartWalletAddress} />
+                <Tabs clientConfig={clientConfig} fungibleToken={smartWalletFungibleToken} nonFungibleToken={smartWalletNonFungibleToken} contractState={contractState} setConfirmationModal={setConfirmationModal} setTx={setTx} smartWalletStx={smartWalletStx} smartWalletAddress={smartWalletAddress} rates={rates} />
 
             </div>
 
             {/* Modals */}
-            {showDepositModal && <DepositModal show={showDepositModal} close={() => setShowDepositModal(false)} stx={userStx} fungibleToken={userFungibleToken} nonFungibleToken={userNonFungibleToken} clientConfig={clientConfig} setTx={setTx} setConfirmationModal={setConfirmationModal} contractState={contractState} smartWalletAddress={smartWalletAddress} />}
+            {showDepositModal && smartWalletAddress && <DepositModal show={showDepositModal} close={() => setShowDepositModal(false)} stx={userStx} fungibleToken={userFungibleToken} nonFungibleToken={userNonFungibleToken} clientConfig={clientConfig} setTx={setTx} setConfirmationModal={setConfirmationModal} contractState={contractState} smartWalletAddress={smartWalletAddress} />}
             {showSmartWalletModal && <SmartWalletDeployModal show={showSmartWalletModal} close={() => setShowSmartWallettModal(false)} clientConfig={clientConfig} setTx={setTx} setConfirmationModal={setConfirmationModal} contractState={contractState} />}
-            {showStxSendModal && <StxSendModal show={showStxSendModal} close={() => setShowStxSendModal(false)} stx={smartWalletStx} clientConfig={clientConfig} setTx={setTx} setConfirmationModal={setConfirmationModal} contractState={contractState} smartWalletAddress={smartWalletAddress} />}
+            {showStxSendModal && smartWalletAddress && <StxSendModal show={showStxSendModal} close={() => setShowStxSendModal(false)} stx={smartWalletStx} clientConfig={clientConfig} setTx={setTx} setConfirmationModal={setConfirmationModal} contractState={contractState} smartWalletAddress={smartWalletAddress} />}
             {showConfirmationModal && <ConfirmedModal show={showConfirmationModal} close={() => setConfirmationModal(false)} tx={tx} clientConfig={clientConfig} />}
         </>
     )

@@ -1,32 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import BaseModal from './basemodal';
 import { Alert, Button, Chip, Code, Input, ModalBody, ModalHeader } from '@heroui/react';
 import { RiLuggageDepositFill } from 'react-icons/ri';
-import { openSTXTransfer } from '@stacks/connect';
-import { Pc, PostConditionMode } from '@stacks/transactions';
+import { openContractCall, openSTXTransfer } from '@stacks/connect';
+import { bufferCVFromString, noneCV, optionalCVOf, Pc, PostConditionMode, principalCV, uintCV } from '@stacks/transactions';
 import { userSession } from '../../user-session';
 import { network } from '../../lib/constants';
+import { umicrostoActualValue } from '../../lib/operator';
 
-const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWalletAddress }) => {
+const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWalletAddress, setTx, setConfirmationModal }) => {
     const userAddress = userSession.loadUserData().profile.stxAddress[clientConfig?.chain];
 
     const [amount, setAmount] = useState(0);
     const [address, setAddress] = useState(userAddress);
     const [memo, setMemo] = useState('');
+    const [isDiabled, setIsDisabled] = useState(false);
 
 
     function sendStx() {
         const txAmount = amount * 1000000;
         const postConditions = [Pc.principal(smartWalletAddress).willSendLte(txAmount).ustx()];
-
-        openSTXTransfer({
-            recipient: address,
-            amount: txAmount,
-            memo,
-            network: network(clientConfig?.chain),
+        const mem = memo ? optionalCVOf(bufferCVFromString(memo)) : noneCV();
+        openContractCall({
+            contractAddress: smartWalletAddress?.split('.')[0],
+            contractName: smartWalletAddress?.split('.')[1],
+            functionName: 'stx-transfer',
+            functionArgs: [uintCV(txAmount), principalCV(address), mem],
+            stxAddress: userAddress,
             postConditions,
             postConditionMode: PostConditionMode.Deny,
-            stxAddress: userAddress
+            network: network(clientConfig?.chain),
+            onFinish: ({ txId }) => {
+                setTx(txId);
+                setConfirmationModal(true);
+                close();
+            }
         })
     }
 
@@ -44,6 +52,15 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
         }
         return num;
     }
+
+    useEffect(() => {
+        const actualBalance = umicrostoActualValue(stx?.balance, 6);
+        if (contractState && amount > 0 && actualBalance > amount) {
+            setIsDisabled(false);
+        } else {
+            setIsDisabled(true);
+        }
+    }, [stx, amount])
 
     return (
         <BaseModal baseModalsOpen={show} baseModalOnClose={close}>
@@ -71,7 +88,7 @@ const StxSendModal = ({ show, close, stx, clientConfig, contractState, smartWall
 
                 </div>
 
-                <Button color="warning" variant="shadow" isDisabled={!contractState} onPress={sendStx}>
+                <Button color="warning" variant="shadow" isDisabled={isDiabled} onPress={sendStx}>
                     <RiLuggageDepositFill color='white' />
                 </Button>
 
