@@ -16,6 +16,7 @@ import { network } from '../../lib/constants';
 import { contracts, EXTENSION_CALL_TOKEN_NAME } from '../../lib/contracts';
 import { userSession } from '../../user-session';
 import { submitToSponsor } from '../../lib/sponsoring';
+import { addressInputToStacksPrinicpal } from '../../lib/addresses';
 
 const SBtcTransfer = ({
   clientConfig,
@@ -34,11 +35,12 @@ const SBtcTransfer = ({
     const transferAmount = Math.round(amount * 1_00_000_000);
     const feesAmount = Math.round(fees * 1_00_000_000);
     console.log({ transferAmount });
+    const to = addressInputToStacksPrinicpal(recipient);
     const serializedPayload = hexToBytes(
       serializeCV(
         tupleCV({
           amount: uintCV(transferAmount),
-          to: principalCV(recipient),
+          to: principalCV(to),
           fees: uintCV(feesAmount),
         })
       )

@@ -51,6 +51,11 @@ path = 'contracts/extensions/ext-delegate-stx-pox-4.clar'
 clarity_version = 3
 epoch = 3.1
 
+[contracts.ext-delegate-stx-pox-4_flow_test]
+path = 'contracts/extensions/ext-delegate-stx-pox-4_flow_test.clar'
+clarity_version = 3
+epoch = 3.1
+
 [contracts.ext-sponsored-transfer]
 path = 'contracts/extensions/ext-sponsored-transfer.clar'
 clarity_version = 3
@@ -58,6 +63,11 @@ epoch = 3.1
 
 [contracts.ext-sponsored-sbtc-transfer]
 path = 'contracts/extensions/ext-sponsored-sbtc-transfer.clar'
+clarity_version = 3
+epoch = 3.1
+
+[contracts.ext-sponsored-sbtc-transfer_test]
+path = 'contracts/extensions/ext-sponsored-sbtc-transfer_test.clar'
 clarity_version = 3
 epoch = 3.1
 
@@ -96,6 +106,13 @@ epoch = 3.1
 path = 'contracts/smart-wallet-standard.clar'
 clarity_version = 3
 epoch = 3.1
+
+
+[contracts.smart-wallet-standard_test]
+path = 'contracts/smart-wallet-standard_test.clar'
+clarity_version = 3
+epoch = 3.1
+
 
 [contracts.smart-wallet-endpoint]
 path = 'contracts/smart-wallet-endpoint.clar'
