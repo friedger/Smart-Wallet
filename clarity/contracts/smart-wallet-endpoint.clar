@@ -1,4 +1,3 @@
-
 ;; title: smart-wallet-endpoint
 ;; version:
 ;; summary:
@@ -8,33 +7,76 @@
 (use-trait wallet-trait .smart-wallet-trait.smart-wallet-trait)
 (use-trait extension-trait .extension-trait.extension-trait)
 
-(define-public (stx-transfer-sponsored (sm <wallet-trait>) (details {amount: uint, to: principal, fees: uint}))
-    (contract-call? sm extension-call .ext-sponsored-transfer (unwrap! (to-consensus-buff? details) err-invalid-payload))
+(define-public (stx-transfer-sponsored
+    (sm <wallet-trait>)
+    (details {
+      amount: uint,
+      to: principal,
+      fees: uint,
+    })
+  )
+  (contract-call? sm extension-call .ext-sponsored-transfer
+    (unwrap! (to-consensus-buff? details) err-invalid-payload)
+  )
 )
 
-(define-public (sbtc-transfer-sponsored (sm <wallet-trait>) (details {amount: uint, to: principal, fees: uint}))
-    (contract-call? sm extension-call .ext-sponsored-sbtc-transfer (unwrap! (to-consensus-buff? details) err-invalid-payload))
+(define-public (sbtc-transfer-sponsored
+    (sm <wallet-trait>)
+    (details {
+      amount: uint,
+      to: principal,
+      fees: uint,
+    })
+  )
+  (contract-call? sm extension-call .ext-sponsored-sbtc-transfer
+    (unwrap! (to-consensus-buff? details) err-invalid-payload)
+  )
 )
 
-(define-public (transfer-unsafe-sip-010-token (sm <wallet-trait>) (details {amount: uint, to: principal, token: <sip-010-token>}))
-    (contract-call? sm extension-call .ext-unsafe-sip010-transfer (unwrap! (to-consensus-buff? details) err-invalid-payload))
+(define-public (transfer-unsafe-sip-010-token
+    (sm <wallet-trait>)
+    (details {
+      amount: uint,
+      to: principal,
+      token: <sip-010-token>,
+    })
+  )
+  (contract-call? sm extension-call .ext-unsafe-sip010-transfer
+    (unwrap! (to-consensus-buff? details) err-invalid-payload)
+  )
 )
-(define-public (delegate-stx (sm <wallet-trait>) (extension <extension-trait>) (amount uint) (to principal))
-    (contract-call? sm extension-call extension (unwrap! (to-consensus-buff?
-        {action: "delegate",
-                    amount-ustx: amount,
-                    delegate-to: to,
-                    until-burn-ht: none,
-                    pox-addr: none,
-                }) err-invalid-payload))
+(define-public (delegate-stx
+    (sm <wallet-trait>)
+    (extension <extension-trait>)
+    (amount uint)
+    (to principal)
+  )
+  (contract-call? sm extension-call extension
+    (unwrap!
+      (to-consensus-buff? {
+        action: "delegate",
+        amount-ustx: amount,
+        delegate-to: to,
+        until-burn-ht: none,
+        pox-addr: none,
+      })
+      err-invalid-payload
+    ))
 )
 
-(define-public (revoke-delegate-stx (sm <wallet-trait>) (extension <extension-trait>))
-    (contract-call? sm extension-call extension (unwrap! (to-consensus-buff?
-    {action: "revoke",
-                    amount-ustx: u0,
-                    delegate-to: tx-sender,
-                    until-burn-ht: none,
-                    pox-addr: none,
-                }) err-invalid-payload))
+(define-public (revoke-delegate-stx
+    (sm <wallet-trait>)
+    (extension <extension-trait>)
+  )
+  (contract-call? sm extension-call extension
+    (unwrap!
+      (to-consensus-buff? {
+        action: "revoke",
+        amount-ustx: u0,
+        delegate-to: tx-sender,
+        until-burn-ht: none,
+        pox-addr: none,
+      })
+      err-invalid-payload
+    ))
 )

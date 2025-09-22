@@ -8,33 +8,26 @@
     "test": "vitest run",
     "test:report": "vitest run -- --coverage --costs",
     "test:watch": "chokidar \"tests/**/*.ts\" \"contracts/**/*.clar\" -c \"npm run test:report\"",
-    "generate": "clarigen generate",
     "update:ui": "cp ./contracts/smart-wallet-standard.clar ./../ui/public/smart-wallet.clar"
   },
   "author": "",
   "license": "ISC",
   "prettier": "@stacks/prettier-config",
   "dependencies": {
-    "@clarigen/cli": "^2.1.2",
-    "@hirosystems/clarinet-sdk": "^2.15.1",
-    "@hirosystems/clarinet-sdk-wasm": "^2.15.1",
-    "@stacks/transactions": "^6.2.1",
+    "@hirosystems/clarinet-sdk": "^3.1.0",
+    "@stacks/clarunit": "friedger/stacks-test-tools#d17b390cad9d9a23fa8231c43b79ae752c951d7c",
+    "@stacks/transactions": "^7.1.0",
     "@vitest/expect": "^3.0.8",
     "chokidar-cli": "^3.0.0",
     "typescript": "^5.8.2",
-    "vite": "^6.2.1",
-    "vitest": "^3.0.8",
+    "vite": "^6.3.5",
+    "vitest": "^3.2.4",
     "vitest-environment-clarinet": "^2.3.0"
   },
   "devDependencies": {
-    "@clarigen/core": "^2.1.2",
-    "@clarigen/test": "^2.1.2",
     "@stacks/prettier-config": "0.0.10"
   },
   "pnpm": {
-    "overrides": {
-      "@hirosystems/clarinet-sdk": "^2.15.1",
-      "@hirosystems/clarinet-wasm": "^2.15.1"
-    }
+    "overrides": {}
   }
 }
